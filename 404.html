@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem İhlali - 404</title>
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #22c55e;
+            font-family: 'Courier New', Courier, monospace; 
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #terminal {
+            max-width: 800px;
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+            position: relative;
+        }
+        
+        #terminal::before {
+            content: "quunix_sys_admin@root:~";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #22c55e;
+            color: #000;
+            padding: 4px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            box-sizing: border-box;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        p {
+            margin: 0.5rem 0;
+            line-height: 1.5;
+            opacity: 0;
+            animation: typeLine 0.1s forwards;
+        }
+
+        p:nth-child(1) { animation-delay: 0.5s; }
+        p:nth-child(2) { animation-delay: 1.5s; }
+        p:nth-child(3) { animation-delay: 2.5s; }
+        p:nth-child(4) { animation-delay: 3.5s; }
+        p:nth-child(5) { animation-delay: 4.5s; }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #22c55e;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes typeLine {
+            to { opacity: 1; }
+        }
+
+        a { 
+            color: #8b5cf6;
+            text-decoration: none; 
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        a:hover { 
+            text-decoration: underline;
+            color: #a855f7; 
+            text-shadow: 0 0 10px #a855f7;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <br>
+        <p>> Bağlantı kuruluyor...</p>
+        <p>> <span style="color: #ef4444;">HATA (404):</span> Aradığınız hedef dizin sunucuda bulunamadı.</p>
+        <p>> Güvenlik duvarı aşılıyor... <span style="color: #ef4444;">Başarısız.</span></p>
+        <p>> Sakin ol. Sadece yanlış bir bağlantıya tıkladın veya kayboldun.</p>
+        <p>> <a href="/">[./baslangic_noktasina_don.sh]</a><span class="cursor"></span></p>
+    </div>
+</body>
+</html>
