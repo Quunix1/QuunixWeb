@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quunix</title>
-    <link rel="icon" type="image/png" href="logo.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -22,6 +21,7 @@
         body {
             background: #000000;
             overflow-x: hidden;
+            transition: all 0.5s ease;
         }
         
         html {
@@ -37,6 +37,7 @@
             pointer-events: none;
             z-index: 0;
             animation: floatGlow 20s ease-in-out infinite;
+            transition: background 1s ease;
         }
         
         .glow-blue {
@@ -48,6 +49,7 @@
             pointer-events: none;
             z-index: 0;
             animation: floatGlow 25s ease-in-out infinite reverse;
+            transition: background 1s ease;
         }
         
         @keyframes floatGlow {
@@ -57,18 +59,22 @@
         }
         
         .hero-text-glow {
-            text-shadow: 
+            text-shadow: 
                 0 0 30px rgba(139, 92, 246, 0.7),
                 0 0 60px rgba(139, 92, 246, 0.4);
         }
         
-        .feature-card {
+        .enhanced-glass {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(24, 24, 27, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.1);
         }
         
-        .feature-card:hover {
+        .enhanced-glass:hover {
             transform: translateY(-10px);
             box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.3);
         }
         
         .btn-glow {
@@ -99,14 +105,8 @@
         }
         
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .animate-fade-in {
@@ -129,23 +129,19 @@
     
     <section class="relative min-h-screen flex items-center justify-center px-4 z-10">
         <div class="text-center">
-            <div class="animate-fade-in delay-100 flex items-center justify-center gap-4 mb-6 relative group">
+            <div class="animate-fade-in delay-100 flex items-center justify-center mb-6 relative group">
     
-    <div class="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20">
-        <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-        
-        <span class="relative text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-blue-400 hero-text-glow">
-            Q
-        </span>
-    </div>
+                <h1 class="text-6xl md:text-9xl font-black hero-text-glow tracking-tight flex items-center cursor-pointer select-none">
+                    <div id="q-container" class="relative flex items-center group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                        <img src="logo.png" alt="Q" id="q-logo" class="relative h-[1.1em] w-auto mr-[0.1em] align-middle hero-text-glow transition-all duration-1000">
+                    </div>
+                    <span id="title-text-rest">uunix.</span>
+                </h1>
 
-    <h1 class="text-6xl md:text-9xl font-black hero-text-glow tracking-tight">
-        Quunix.
-    </h1>
-
-</div>
+            </div>
             <div class="animate-fade-in delay-300">
-                <p class="text-gray-500 text-lg md:text-xl tracking-widest uppercase">
+                <p id="sub-title" class="text-gray-500 text-lg md:text-xl tracking-widest uppercase transition-colors duration-500">
                     Scripting My Own Way
                 </p>
             </div>
@@ -175,7 +171,7 @@
             
             <div class="grid md:grid-cols-3 gap-8 mb-16">
                 
-                <div class="feature-card bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
+                <div class="feature-card enhanced-glass rounded-2xl p-8 border border-purple-500/10">
                     <div class="mb-6">
                         <i data-lucide="trophy" class="w-14 h-14 text-purple-400 mb-4"></i>
                         <h3 class="text-2xl font-extrabold mb-3">Gelişmiş Seviye Sistemi</h3>
@@ -185,7 +181,7 @@
                     </p>
                 </div>
                 
-                <div class="feature-card bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
+                <div class="feature-card enhanced-glass rounded-2xl p-8 border border-purple-500/10">
                     <div class="mb-6">
                         <i data-lucide="mic" class="w-14 h-14 text-purple-400 mb-4"></i>
                         <h3 class="text-2xl font-extrabold mb-3">Ses Aktifliği Takibi</h3>
@@ -195,7 +191,7 @@
                     </p>
                 </div>
                 
-                <div class="feature-card bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
+                <div class="feature-card enhanced-glass rounded-2xl p-8 border border-purple-500/10">
                     <div class="mb-6">
                         <i data-lucide="brain" class="w-14 h-14 text-purple-400 mb-4"></i>
                         <h3 class="text-2xl font-extrabold mb-3">Akıllı Algoritmalar</h3>
@@ -209,7 +205,7 @@
             
             <div class="space-y-6">
                 
-                <div class="feature-card bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-10">
+                <div class="feature-card enhanced-glass rounded-2xl p-10 border border-purple-500/10">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="flex-shrink-0">
                             <i data-lucide="layout-dashboard" class="w-16 h-16 text-purple-400"></i>
@@ -223,7 +219,7 @@
                     </div>
                 </div>
                 
-                <div class="feature-card bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-10">
+                <div class="feature-card enhanced-glass rounded-2xl p-10 border border-purple-500/10">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="flex-shrink-0">
                             <i data-lucide="bar-chart-3" class="w-16 h-16 text-purple-400"></i>
@@ -237,7 +233,7 @@
                     </div>
                 </div>
                 
-                <div class="feature-card bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-10">
+                <div class="feature-card enhanced-glass rounded-2xl p-10 border border-purple-500/10">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="flex-shrink-0">
                             <i data-lucide="palette" class="w-16 h-16 text-purple-400"></i>
@@ -314,11 +310,60 @@
     
     <script>
         lucide.createIcons();
+
+        console.log("%cHey, kodlarımı mı inceliyorsun? \n%cQuunix evrenine hoş geldin. Matrix'in derinliklerinde görüşürüz.", "color: #8b5cf6; font-size: 18px; font-weight: bold;", "color: #a1a1aa; font-size: 14px;");
+
+        let clickCount = 0;
+        let clickTimer;
+        const qContainer = document.getElementById('q-container');
+        const qLogoImg = document.getElementById('q-logo');
+        let isHacked = false;
+        
+        if (qContainer) {
+            qContainer.addEventListener('click', () => {
+                if (isHacked) return; 
+                
+                clickCount++;
+                clearTimeout(clickTimer);
+                
+                if (clickCount >= 5) {
+                    activateHackerMode();
+                    clickCount = 0;
+                } else {
+                    clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
+                }
+            });
+        }
+
+        function activateHackerMode() {
+            isHacked = true;
+            
+            document.body.style.background = '#050505';
+            
+            const glows = document.querySelectorAll('.glow-purple, .glow-blue');
+            glows.forEach(glow => {
+                glow.style.background = 'radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, transparent 70%)';
+            });
+            
+            const titleRest = document.getElementById('title-text-rest');
+            titleRest.textContent = ' HACKED.';
+            titleRest.className = 'text-green-500';
+            titleRest.style.textShadow = '0 0 20px #00ff00';
+
+            if (qLogoImg) {
+                qLogoImg.style.filter = 'hue-rotate(90deg) saturate(1.5) drop-shadow(0 0 10px #00ff00)';
+                qLogoImg.style.textShadow = 'none';
+            }
+
+            const subTitle = document.getElementById('sub-title');
+            subTitle.textContent = 'SYSTEM OVERRIDE SUCCESSFUL // ROOT ACCESS GRANTED';
+            subTitle.className = 'text-green-500 text-lg md:text-xl font-mono tracking-widest uppercase mt-4';
+            
+            setTimeout(() => {
+                alert("Uyarı: Yetkisiz giriş tespit edildi... \nSistem yönetici (Quunix) moduna geçirildi.");
+            }, 500);
+        }
     </script>
     
 </body>
-
 </html>
-
-
-
