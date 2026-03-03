@@ -4,30 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quunix</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
+        * { font-family: 'Inter', sans-serif; cursor: none; }
+        body { background: #000000; overflow-x: hidden; transition: all 0.5s ease; }
+        html { scroll-behavior: smooth; }
         
-        body {
-            background: #000000;
-            overflow-x: hidden;
-            transition: all 0.5s ease;
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            border-radius: full;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
-        
-        html {
-            scroll-behavior: smooth;
+
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
         }
-        
+
         .glow-purple {
             position: fixed;
             width: 800px;
@@ -37,7 +47,6 @@
             pointer-events: none;
             z-index: 0;
             animation: floatGlow 20s ease-in-out infinite;
-            transition: background 1s ease;
         }
         
         .glow-blue {
@@ -49,321 +58,211 @@
             pointer-events: none;
             z-index: 0;
             animation: floatGlow 25s ease-in-out infinite reverse;
-            transition: background 1s ease;
         }
-        
+
         @keyframes floatGlow {
             0%, 100% { transform: translate(0, 0); }
             33% { transform: translate(50px, -50px); }
             66% { transform: translate(-50px, 50px); }
         }
-        
+
         .hero-text-glow {
-            text-shadow: 
-                0 0 30px rgba(139, 92, 246, 0.7),
-                0 0 60px rgba(139, 92, 246, 0.4);
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.7), 0 0 60px rgba(139, 92, 246, 0.4);
         }
-        
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .enhanced-glass {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(24, 24, 27, 0.4);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(139, 92, 246, 0.1);
+            transition: all 0.4s ease;
         }
-        
+
         .enhanced-glass:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3);
-            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
         }
-        
+
         .btn-glow {
             box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
-        
-        .btn-glow::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-glow:hover::before {
-            left: 100%;
-        }
-        
+
         .btn-glow:hover {
             box-shadow: 0 0 60px rgba(139, 92, 246, 0.9);
             transform: scale(1.05);
         }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fade-in {
-            animation: fadeInUp 1s ease-out forwards;
-        }
-        
-        .delay-100 { animation-delay: 0.1s; opacity: 0; }
-        .delay-200 { animation-delay: 0.2s; opacity: 0; }
-        .delay-300 { animation-delay: 0.3s; opacity: 0; }
-        .delay-400 { animation-delay: 0.4s; opacity: 0; }
-        .delay-500 { animation-delay: 0.5s; opacity: 0; }
-        .delay-600 { animation-delay: 0.6s; opacity: 0; }
     </style>
 </head>
 <body class="text-white">
-    
+
+    <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
     <div class="glow-purple" style="top: -400px; left: -400px;"></div>
     <div class="glow-blue" style="bottom: -350px; right: -350px;"></div>
-    <div class="glow-purple" style="top: 40%; right: -400px;"></div>
-    
+
     <section class="relative min-h-screen flex items-center justify-center px-4 z-10">
         <div class="text-center">
-            <div class="animate-fade-in delay-100 flex items-center justify-center mb-6 relative group">
-    
+            <div class="flex items-center justify-center mb-6 relative group">
                 <h1 class="text-6xl md:text-9xl font-black hero-text-glow tracking-tight flex items-center cursor-pointer select-none">
                     <div id="q-container" class="relative flex items-center group">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                        <img src="logo.png" alt="Q" id="q-logo" class="relative h-[1.1em] w-auto mr-[0.1em] align-middle hero-text-glow transition-all duration-1000">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60 group-hover:opacity-100 transition duration-1000"></div>
+                        <img src="logo.png" alt="Q" id="q-logo" class="relative h-[1.1em] w-auto mr-[0.1em] align-middle transition-all duration-1000">
                     </div>
                     <span id="title-text-rest">uunix.</span>
                 </h1>
-
             </div>
-            <div class="animate-fade-in delay-300">
-                <p id="sub-title" class="text-gray-500 text-lg md:text-xl tracking-widest uppercase transition-colors duration-500">
+            <div>
+                <p id="sub-title" class="text-gray-500 text-lg md:text-xl tracking-widest uppercase">
                     Scripting My Own Way
                 </p>
             </div>
         </div>
-        
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
             <i data-lucide="chevron-down" class="w-10 h-10 text-purple-400 opacity-50"></i>
         </div>
     </section>
-    
+
     <section class="relative py-20 px-4 z-10">
         <div class="max-w-6xl mx-auto">
-            
-            <div class="text-center mb-20">
-                <div class="inline-block mb-6 animate-fade-in">
+            <div class="text-center mb-20 reveal">
+                <div class="inline-block mb-6">
                     <span class="px-5 py-2 bg-purple-500/10 border border-purple-500/30 text-purple-300 rounded-full text-sm font-bold tracking-wide">
                         DISCORD BOT
                     </span>
                 </div>
-                <h2 class="text-5xl md:text-7xl font-black mb-6 text-purple-400 animate-fade-in delay-100">
-                    MOEBIUS
-                </h2>
-                <p class="text-gray-400 text-xl opacity-60 max-w-3xl mx-auto animate-fade-in delay-200">
+                <h2 class="text-5xl md:text-7xl font-black mb-6 text-purple-400">MOEBIUS</h2>
+                <p class="text-gray-400 text-xl opacity-60 max-w-3xl mx-auto">
                     Gelişmiş algoritmalar, akıllı sistemler ve modern yönetim araçlarıyla Discord sunucunuzu dönüştürün
                 </p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8 mb-16">
-                
-                <div class="feature-card enhanced-glass rounded-2xl p-8 border border-purple-500/10">
-                    <div class="mb-6">
-                        <i data-lucide="trophy" class="w-14 h-14 text-purple-400 mb-4"></i>
-                        <h3 class="text-2xl font-extrabold mb-3">Gelişmiş Seviye Sistemi</h3>
-                    </div>
-                    <p class="text-gray-400 opacity-60 leading-relaxed">
-                        Adil XP dağılımı, özelleştirilebilir rank kartları ve otomatik rol atamaları ile üyelerinizi motive edin
-                    </p>
+                <div class="feature-card enhanced-glass rounded-2xl p-8 reveal">
+                    <i data-lucide="trophy" class="w-14 h-14 text-purple-400 mb-6"></i>
+                    <h3 class="text-2xl font-extrabold mb-3">Gelişmiş Seviye Sistemi</h3>
+                    <p class="text-gray-400 opacity-60">Adil XP dağılımı ve otomatik rol atamaları ile üyelerinizi motive edin.</p>
                 </div>
-                
-                <div class="feature-card enhanced-glass rounded-2xl p-8 border border-purple-500/10">
-                    <div class="mb-6">
-                        <i data-lucide="mic" class="w-14 h-14 text-purple-400 mb-4"></i>
-                        <h3 class="text-2xl font-extrabold mb-3">Ses Aktifliği Takibi</h3>
-                    </div>
-                    <p class="text-gray-400 opacity-60 leading-relaxed">
-                        Ses kanallarında geçirilen süreyi akıllı algoritmalarla takip edin ve ödüllendirin
-                    </p>
+                <div class="feature-card enhanced-glass rounded-2xl p-8 reveal" style="transition-delay: 0.1s;">
+                    <i data-lucide="mic" class="w-14 h-14 text-purple-400 mb-6"></i>
+                    <h3 class="text-2xl font-extrabold mb-3">Ses Aktifliği Takibi</h3>
+                    <p class="text-gray-400 opacity-60">Ses kanallarında geçirilen süreyi akıllı algoritmalarla takip edin.</p>
                 </div>
-                
-                <div class="feature-card enhanced-glass rounded-2xl p-8 border border-purple-500/10">
-                    <div class="mb-6">
-                        <i data-lucide="brain" class="w-14 h-14 text-purple-400 mb-4"></i>
-                        <h3 class="text-2xl font-extrabold mb-3">Akıllı Algoritmalar</h3>
-                    </div>
-                    <p class="text-gray-400 opacity-60 leading-relaxed">
-                        Spam koruması, otomatik moderasyon ve davranış analizi ile sunucunuzu güvende tutun
-                    </p>
+                <div class="feature-card enhanced-glass rounded-2xl p-8 reveal" style="transition-delay: 0.2s;">
+                    <i data-lucide="brain" class="w-14 h-14 text-purple-400 mb-6"></i>
+                    <h3 class="text-2xl font-extrabold mb-3">Akıllı Algoritmalar</h3>
+                    <p class="text-gray-400 opacity-60">Spam koruması ve davranış analizi ile sunucunuzu güvende tutun.</p>
                 </div>
-                
             </div>
-            
+
             <div class="space-y-6">
-                
-                <div class="feature-card enhanced-glass rounded-2xl p-10 border border-purple-500/10">
+                <div class="feature-card enhanced-glass rounded-2xl p-10 reveal">
                     <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="flex-shrink-0">
-                            <i data-lucide="layout-dashboard" class="w-16 h-16 text-purple-400"></i>
-                        </div>
+                        <i data-lucide="layout-dashboard" class="w-16 h-16 text-purple-400"></i>
                         <div>
                             <h3 class="text-3xl font-extrabold mb-3">Modern Web Dashboard</h3>
-                            <p class="text-gray-400 opacity-60 text-lg">
-                                Komut satırına gerek yok. Tüm ayarları web üzerinden saniyeler içinde yönetin. Sezgisel arayüz, gerçek zamanlı önizleme.
-                            </p>
+                            <p class="text-gray-400 opacity-60 text-lg">Tüm ayarları web üzerinden saniyeler içinde yönetin.</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="feature-card enhanced-glass rounded-2xl p-10 border border-purple-500/10">
+                <div class="feature-card enhanced-glass rounded-2xl p-10 reveal">
                     <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="flex-shrink-0">
-                            <i data-lucide="bar-chart-3" class="w-16 h-16 text-purple-400"></i>
-                        </div>
+                        <i data-lucide="bar-chart-3" class="w-16 h-16 text-purple-400"></i>
                         <div>
                             <h3 class="text-3xl font-extrabold mb-3">Detaylı İstatistikler</h3>
-                            <p class="text-gray-400 opacity-60 text-lg">
-                                Sunucu aktivitesi, üye etkileşimleri, mesaj trendleri ve ses kanalı kullanımını gerçek zamanlı takip edin.
-                            </p>
+                            <p class="text-gray-400 opacity-60 text-lg">Sunucu aktivitesini ve üye etkileşimlerini gerçek zamanlı takip edin.</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="feature-card enhanced-glass rounded-2xl p-10 border border-purple-500/10">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="flex-shrink-0">
-                            <i data-lucide="palette" class="w-16 h-16 text-purple-400"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-3xl font-extrabold mb-3">Tam Özelleştirme</h3>
-                            <p class="text-gray-400 opacity-60 text-lg">
-                                Rank kartlarından XP oranlarına, bildirim mesajlarından rol renklerine kadar her detayı sunucunuza özel ayarlayın.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
-            
         </div>
     </section>
-    
-    <section class="relative py-32 px-4 z-10">
+
+    <section class="relative py-32 px-4 z-10 reveal">
         <div class="max-w-4xl mx-auto text-center">
-            
             <div class="bg-zinc-900/30 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-12 md:p-16">
-                
-                <h2 class="text-4xl md:text-6xl font-black mb-6 text-purple-400">
-                    Moebius'u Sunucuna Ekle
-                </h2>
-                
-                <p class="text-gray-400 opacity-60 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-                    Gelişmiş Discord bot deneyimini hemen başlatın
-                </p>
-                
-                <div class="mb-8">
-                    <a href="https://discord.com/oauth2/authorize?client_id=985301138851123240" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="btn-glow inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-purple-600 to-purple-500 rounded-2xl text-xl font-bold">
-                        <i data-lucide="plus-circle" class="w-7 h-7"></i>
-                        Botu Ekle
+                <h2 class="text-4xl md:text-6xl font-black mb-6 text-purple-400">Moebius'u Sunucuna Ekle</h2>
+                <div class="mb-10">
+                    <a href="https://discord.com/oauth2/authorize?client_id=985301138851123240" target="_blank" class="btn-glow inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-purple-600 to-purple-500 rounded-2xl text-xl font-bold">
+                        <i data-lucide="plus-circle" class="w-7 h-7"></i> Botu Ekle
                     </a>
                 </div>
-                
-                <div class="text-gray-500 text-sm">
-                    <p class="opacity-60">Geliştirici: <span class="text-purple-400 font-bold">Quunix</span></p>
-                </div>
-                
+                <p class="text-gray-500 text-sm">Geliştirici: <span class="text-purple-400 font-bold">Quunix</span></p>
             </div>
-            
         </div>
     </section>
-    
+
     <footer class="relative py-12 px-4 border-t border-zinc-900 z-10">
-        <div class="max-w-6xl mx-auto">
-            
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                
-                <div class="text-center md:text-left">
-                    <h3 class="text-2xl font-black text-purple-400 mb-2">Quunix</h3>
-                    <p class="text-gray-600 text-sm">© 2026 Quunix - Tüm Hakları Saklıdır</p>
-                </div>
-                
-                <div class="flex gap-4">
-                    <a href="https://discord.com/users/1247273039431860226"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="w-12 h-12 bg-zinc-900/50 border border-purple-500/20 rounded-xl flex items-center justify-center hover:bg-purple-500/10 hover:border-purple-500/40 transition-all hover:scale-110">
-                        <i data-lucide="user" class="w-5 h-5 text-purple-400"></i>
-                    </a>
-                </div>
-                
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="text-2xl font-black text-purple-400 mb-2">Quunix</h3>
+                <p class="text-gray-600 text-sm">© 2026 Quunix - Tüm Hakları Saklıdır</p>
             </div>
-            
+            <a href="https://discord.com/users/1247273039431860226" target="_blank" class="w-12 h-12 bg-zinc-900/50 border border-purple-500/20 rounded-xl flex items-center justify-center hover:bg-purple-500/10 transition-all hover:scale-110">
+                <i data-lucide="user" class="w-5 h-5 text-purple-400"></i>
+            </a>
         </div>
     </footer>
-    
+
     <script>
         lucide.createIcons();
 
-        console.log("%cHey, kodlarımı mı inceliyorsun? \n%cQuunix evrenine hoş geldin. Matrix'in derinliklerinde görüşürüz.", "color: #8b5cf6; font-size: 18px; font-weight: bold;", "color: #a1a1aa; font-size: 14px;");
+        const glow = document.getElementById('cursor-glow');
+        const dot = document.getElementById('cursor-dot');
+        window.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         let clickCount = 0;
         let clickTimer;
         const qContainer = document.getElementById('q-container');
         const qLogoImg = document.getElementById('q-logo');
         let isHacked = false;
-        
-        if (qContainer) {
-            qContainer.addEventListener('click', () => {
-                if (isHacked) return; 
-                
-                clickCount++;
-                clearTimeout(clickTimer);
-                
-                if (clickCount >= 5) {
-                    activateHackerMode();
-                    clickCount = 0;
-                } else {
-                    clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
-                }
-            });
-        }
+
+        qContainer.addEventListener('click', () => {
+            if (isHacked) return;
+            clickCount++;
+            clearTimeout(clickTimer);
+            if (clickCount >= 5) { activateHackerMode(); clickCount = 0; }
+            else { clickTimer = setTimeout(() => { clickCount = 0; }, 2000); }
+        });
 
         function activateHackerMode() {
             isHacked = true;
-            
             document.body.style.background = '#050505';
-            
-            const glows = document.querySelectorAll('.glow-purple, .glow-blue');
-            glows.forEach(glow => {
-                glow.style.background = 'radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, transparent 70%)';
-            });
-            
-            const titleRest = document.getElementById('title-text-rest');
-            titleRest.textContent = ' HACKED.';
-            titleRest.className = 'text-green-500';
-            titleRest.style.textShadow = '0 0 20px #00ff00';
-
-            if (qLogoImg) {
-                qLogoImg.style.filter = 'hue-rotate(90deg) saturate(1.5) drop-shadow(0 0 10px #00ff00)';
-                qLogoImg.style.textShadow = 'none';
-            }
-
-            const subTitle = document.getElementById('sub-title');
-            subTitle.textContent = 'SYSTEM OVERRIDE SUCCESSFUL // ROOT ACCESS GRANTED';
-            subTitle.className = 'text-green-500 text-lg md:text-xl font-mono tracking-widest uppercase mt-4';
-            
-            setTimeout(() => {
-                alert("Uyarı: Yetkisiz giriş tespit edildi... \nSistem yönetici (Quunix) moduna geçirildi.");
-            }, 500);
+            document.querySelectorAll('.glow-purple, .glow-blue').forEach(g => g.style.background = 'radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, transparent 70%)');
+            document.getElementById('title-text-rest').textContent = ' HACKED.';
+            document.getElementById('title-text-rest').className = 'text-green-500';
+            dot.style.background = '#22c55e';
+            glow.style.background = 'radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%)';
+            if (qLogoImg) qLogoImg.style.filter = 'hue-rotate(90deg) saturate(1.5) drop-shadow(0 0 10px #00ff00)';
+            const sub = document.getElementById('sub-title');
+            sub.textContent = 'SYSTEM OVERRIDE SUCCESSFUL // ROOT ACCESS GRANTED';
+            sub.className = 'text-green-500 text-lg md:text-xl font-mono tracking-widest uppercase mt-4';
+            setTimeout(() => { alert("Uyarı: Yetkisiz giriş tespit edildi... \nSistem yönetici (Quunix) moduna geçirildi."); }, 500);
         }
     </script>
-    
 </body>
 </html>
