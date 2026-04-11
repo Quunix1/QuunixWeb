@@ -6,6 +6,7 @@
 <title>Quunix</title>
 
 <link rel="icon" href="pp.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -85,10 +86,18 @@ body{
   text-shadow:0 0 10px #38bdf8, 0 0 35px #38bdf8, 0 0 80px rgba(56,189,248,0.6);
 }
 
-/* BOTTOM SECRET TEXT */
+/* SPOTIFY */
+.spotify{
+  width:650px;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 0 40px rgba(56,189,248,0.25), 0 0 90px rgba(56,189,248,0.15);
+}
+
+/* SECRET TEXT */
 .secret{
   position:fixed;
-  bottom:12px;
+  bottom:10px;
   width:100%;
   text-align:center;
   font-size:14px;
@@ -98,7 +107,7 @@ body{
 }
 
 .secret .h{
-  opacity:0; /* tamamen görünmez */
+  opacity:0;
 }
 
 /* ANIMATION */
@@ -122,9 +131,22 @@ body{
 <div class="cursor" id="cursor"></div>
 
 <div class="wrap">
+
   <img src="pp.png" class="pfp">
 
   <div class="name">Quunix</div>
+
+  <div class="spotify">
+    <iframe 
+      style="border-radius:12px"
+      src="https://open.spotify.com/embed/playlist/55AzvgCu5D4WubbdPx1VOa?utm_source=generator&theme=0"
+      width="100%" height="352"
+      frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+
 </div>
 
 <div class="secret">
