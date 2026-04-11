@@ -1,525 +1,161 @@
 <!DOCTYPE html>
-<html lang="tr" class="scroll-smooth">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quunix - Portfolio</title>
-    <meta name="description" content="Quunix - Professional Discord Bot Development">
-    <link rel="icon" href="logo.png" type="image/png">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        * {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none;
-        }
-        
-        body {
-            background: #000000;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        .cursor-ring {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #8B5CF6;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            transform: translate(-50%, -50%);
-            transition: all 0.15s ease;
-        }
-        
-        .cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: #8B5CF6;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10001;
-            transform: translate(-50%, -50%);
-        }
-        
-        .glow-orb {
-            position: fixed;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
-            filter: blur(90px);
-            pointer-events: none;
-            z-index: 0;
-            animation: float 20s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, -30px); }
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quunix</title>
 
-        .hero-glow {
-            text-shadow: 0 0 50px rgba(139, 92, 246, 0.6), 0 0 100px rgba(139, 92, 246, 0.3);
-        }
+<link rel="icon" href="pp.png">
 
-        .bento-card {
-            background: rgba(15, 15, 20, 0.8);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(139, 92, 246, 0.15);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .bento-card::before {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .bento-card:hover::before {
-            opacity: 1;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-        .bento-card:hover {
-            border-color: rgba(139, 92, 246, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.25);
-        }
-        
-        .bento-icon {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-        
-        .bento-card:hover .bento-icon {
-            transform: translateZ(30px) scale(1.1);
-            filter: drop-shadow(0 10px 20px rgba(139, 92, 246, 0.6));
-        }
-        
-        .magnetic-icon {
-            transition: transform 0.2s ease;
-        }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
-        }
+body{
+  height:100vh;
+  overflow:hidden;
+  font-family:Inter;
+  color:white;
+  background:#000;
+}
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-        
-        .pulse-ring {
-            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        @keyframes float-tech {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-20px) rotate(5deg);
-            }
-        }
-        
-        .float-tech {
-            animation: float-tech 3s ease-in-out infinite;
-        }
+/* BACKGROUND */
+.bg{
+  position:fixed;
+  inset:0;
+  background:url("banner.png") center/cover no-repeat;
+  filter:brightness(0.35) saturate(1.3) blur(2px);
+  transform:scale(1.08);
+}
 
-        .chip {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .chip:hover {
-            background: rgba(139, 92, 246, 0.2);
-            transform: scale(1.05);
-        }
-        
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #8B5CF6, #7C3AED);
-            z-index: 10000;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.8);
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #22C55E;
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        @media (max-width: 768px) {
-            * {
-                cursor: auto;
-            }
-            .cursor-ring, .cursor-dot {
-                display: none;
-            }
-            .glow-orb {
-                width: 400px;
-                height: 400px;
-            }
-        }
-    </style>
+.overlay{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top, rgba(0,200,255,0.25), transparent 60%),
+    radial-gradient(circle at bottom, rgba(120,220,255,0.15), transparent 60%);
+}
+
+/* CURSOR */
+.cursor{
+  position:fixed;
+  width:10px;
+  height:10px;
+  background:#7dd3fc;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  box-shadow:0 0 20px #38bdf8;
+}
+
+/* CENTER */
+.wrap{
+  position:relative;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:40px;
+  text-align:center;
+}
+
+/* PROFILE */
+.pfp{
+  width:210px;
+  height:210px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #7dd3fc;
+
+  box-shadow:
+    0 0 30px #38bdf8,
+    0 0 90px rgba(56,189,248,0.45);
+
+  animation:pulse 3s infinite ease-in-out;
+}
+
+/* NAME */
+.name{
+  font-family:Orbitron, sans-serif;
+  font-size:80px;
+  font-weight:900;
+  letter-spacing:6px;
+  color:#7dd3fc;
+
+  text-shadow:
+    0 0 10px #38bdf8,
+    0 0 35px #38bdf8,
+    0 0 80px rgba(56,189,248,0.6);
+}
+
+/* SPOTIFY */
+.spotify{
+  width:650px;
+  border-radius:18px;
+  overflow:hidden;
+
+  box-shadow:
+    0 0 40px rgba(56,189,248,0.25),
+    0 0 90px rgba(56,189,248,0.15);
+}
+
+/* ANIMATION */
+@keyframes pulse{
+  0%,100%{
+    transform:scale(1);
+    box-shadow:
+      0 0 30px #38bdf8,
+      0 0 80px rgba(56,189,248,0.35);
+  }
+  50%{
+    transform:scale(1.04);
+    box-shadow:
+      0 0 50px #38bdf8,
+      0 0 120px rgba(56,189,248,0.55);
+  }
+}
+</style>
 </head>
+
 <body>
-    <div id="scroll-progress"></div>
-    
-    <div class="cursor-ring"></div>
-    <div class="cursor-dot"></div>
-    
-    <div class="glow-orb" style="top: -250px; left: -250px;"></div>
-    <div class="glow-orb" style="bottom: -250px; right: -250px; animation-delay: -10s;"></div>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center px-6 z-10">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="flex items-center justify-center mb-10 fade-in">
-                <h1 class="text-7xl md:text-9xl font-black tracking-tight flex items-center hero-glow">
-                    <img src="logo.png" alt="Q" class="h-[1.1em] w-auto mr-[0.08em]">
-                    <span>uunix</span>
-                </h1>
-            </div>
-            <p class="text-gray-400 text-xl md:text-2xl tracking-widest uppercase font-semibold fade-in" style="animation-delay: 0.2s;">
-                Scripting My Own Way
-            </p>
-        </div>
-    </section>
+<div class="bg"></div>
+<div class="overlay"></div>
+<div class="cursor" id="cursor"></div>
 
-    <!-- Bento Grid Section -->
-    <section class="relative py-20 px-6 z-10">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <!-- Large Card - Clay Bot (2 columns, 2 rows) -->
-                <div class="bento-card rounded-3xl p-10 md:col-span-2 md:row-span-2 fade-in flex flex-col justify-between" style="animation-delay: 0.1s;">
-                    <div>
-                        <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <span class="text-xs font-mono text-purple-400 uppercase tracking-wider">Main Project</span>
-                                <h3 class="text-5xl font-black mt-2 text-white">Clay Bot</h3>
-                            </div>
-                            <div class="relative">
-                                <div class="h-14 w-14 bg-purple-500/20 rounded-full flex items-center justify-center">
-                                    <div class="h-6 w-6 bg-purple-500 rounded-full"></div>
-                                </div>
-                                <div class="absolute inset-0 h-14 w-14 bg-purple-500/30 rounded-full pulse-ring"></div>
-                            </div>
-                        </div>
-                        
-                        <p class="text-gray-400 text-lg leading-relaxed mb-6">
-                            Next-generation Discord bot with advanced moderation, leveling, and real-time dashboard
-                        </p>
-                        
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="chip px-4 py-2 rounded-full text-sm font-semibold text-purple-300">/level</span>
-                            <span class="chip px-4 py-2 rounded-full text-sm font-semibold text-purple-300">/ban</span>
-                            <span class="chip px-4 py-2 rounded-full text-sm font-semibold text-purple-300">/dashboard</span>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-4 text-sm font-mono text-gray-500 mb-6">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="server" class="w-4 h-4"></i>
-                                <span>Frankfurt, DE</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="code" class="w-4 h-4"></i>
-                                <span>v2.4.0-stable</span>
-                            </div>
-                        </div>
-                        
-                        <div class="status-badge">
-                            <div class="status-dot"></div>
-                            <span class="text-green-400">99.9% Uptime</span>
-                        </div>
-                    </div>
-                    
-                    <a href="https://discord.com/oauth2/authorize?client_id=1184914770973958274" target="_blank" class="mt-6 bg-gradient-to-r from-purple-600 to-purple-500 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-white hover:scale-105 transition-transform">
-                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                        Add to Server
-                    </a>
-                </div>
-                
-                <!-- Medium Card - Technologies (1 column, 1 row) -->
-                <div class="bento-card rounded-3xl p-8 fade-in" style="animation-delay: 0.2s;">
-                    <h3 class="text-xl font-bold mb-6 text-white">Tech Stack</h3>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="h-16 w-16 bg-purple-500/10 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform float-tech" style="animation-delay: 0s;">
-                            <i data-lucide="code-2" class="w-8 h-8 text-purple-400"></i>
-                        </div>
-                        <div class="h-16 w-16 bg-purple-500/10 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform float-tech" style="animation-delay: 0.5s;">
-                            <i data-lucide="database" class="w-8 h-8 text-purple-400"></i>
-                        </div>
-                        <div class="h-16 w-16 bg-purple-500/10 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform float-tech" style="animation-delay: 1s;">
-                            <i data-lucide="layout" class="w-8 h-8 text-purple-400"></i>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex flex-wrap gap-2">
-                        <span class="chip px-3 py-1.5 rounded-full text-xs font-semibold text-purple-300">Node.js</span>
-                        <span class="chip px-3 py-1.5 rounded-full text-xs font-semibold text-purple-300">MongoDB</span>
-                        <span class="chip px-3 py-1.5 rounded-full text-xs font-semibold text-purple-300">React</span>
-                    </div>
-                </div>
-                
-                <!-- Medium Card - Stats (1 column, 1 row) -->
-                <div class="bento-card rounded-3xl p-8 fade-in" style="animation-delay: 0.3s;">
-                    <div class="bento-icon mb-4">
-                        <i data-lucide="activity" class="w-10 h-10 text-purple-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-6 text-white">Statistics</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="stat-number" data-target="100000">0</div>
-                            <p class="text-gray-400 text-sm">100K+ Lines of Code</p>
-                        </div>
-                        <div>
-                            <div class="stat-number" data-target="4">0</div>
-                            <p class="text-gray-400 text-sm">Projects Completed</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Small Card - GitHub -->
-                <div class="bento-card rounded-3xl p-8 fade-in flex flex-col items-center justify-center text-center magnetic-card" style="animation-delay: 0.4s;">
-                    <div class="bento-icon magnetic-icon mb-4">
-                        <i data-lucide="github" class="w-16 h-16 text-purple-400"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-1">GitHub</h3>
-                    <p class="text-gray-400 text-sm">@Quunix</p>
-                </div>
-                
-                <!-- Small Card - Discord -->
-                <div class="bento-card rounded-3xl p-8 fade-in flex flex-col items-center justify-center text-center magnetic-card" style="animation-delay: 0.5s;">
-                    <div class="bento-icon magnetic-icon mb-4">
-                        <i data-lucide="message-circle" class="w-16 h-16 text-purple-400"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-1">Discord</h3>
-                    <p class="text-gray-400 text-sm">quunix</p>
-                </div>
-                <div class="bento-card rounded-3xl p-8 fade-in flex flex-col items-center justify-center text-center magnetic-card" style="animation-delay: 0.5s;">
-                    
-                    <h3 class="text-lg font-bold text-white mb-1">Boş kalmasın diye :)</h3>
-                    <p class="text-gray-400 text-sm">quunix</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="wrap">
 
-    <!-- CTA Section -->
-    <section class="relative py-20 px-6 z-10">
-        <div class="max-w-4xl mx-auto">
-            <div class="bento-card rounded-3xl p-12 md:p-16 text-center fade-in">
-                <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">
-                    Let's Work Together
-                </h2>
-                <p class="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">
-                    Join the support server for collaboration and updates
-                </p>
-                <a href="https://discord.gg/trsohbet" target="_blank" class="bg-gradient-to-r from-purple-600 to-purple-500 inline-flex items-center justify-center gap-3 px-10 py-4 rounded-xl text-lg font-bold text-white hover:scale-105 transition-transform">
-                    <i data-lucide="message-circle" class="w-6 h-6"></i>
-                    Join Support Server
-                </a>
-            </div>
-        </div>
-    </section>
+  <img src="pp.png" class="pfp">
 
-    <!-- Footer -->
-    <footer class="relative py-12 px-6 border-t border-gray-900 z-10">
-        <div class="max-w-7xl mx-auto text-center">
-            <h3 class="text-3xl font-black bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-2">Quunix</h3>
-            <p class="text-gray-500 text-sm">© 2026 - All Rights Reserved</p>
-        </div>
-    </footer>
+  <div class="name">Quunix</div>
 
-    <script>
-        lucide.createIcons();
-        
-        // Custom Cursor
-        const cursorRing = document.querySelector('.cursor-ring');
-        const cursorDot = document.querySelector('.cursor-dot');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursorRing.style.left = e.clientX + 'px';
-            cursorRing.style.top = e.clientY + 'px';
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-        });
-        
-        // Cursor hover effect
-        document.querySelectorAll('a, button, .bento-card').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorRing.style.width = '60px';
-                cursorRing.style.height = '60px';
-                cursorRing.style.borderColor = '#A78BFA';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorRing.style.width = '40px';
-                cursorRing.style.height = '40px';
-                cursorRing.style.borderColor = '#8B5CF6';
-            });
-        });
-        
-        // Spotlight Effect
-        document.querySelectorAll('.bento-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const spotlight = card.querySelector('::before') || card;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-                
-                const beforeEl = window.getComputedStyle(card, '::before');
-                card.style.setProperty('--spotlight-x', `${x - 100}px`);
-                card.style.setProperty('--spotlight-y', `${y - 100}px`);
-                
-                card.querySelector('::before')?.style.setProperty('left', `${x - 100}px`);
-                card.querySelector('::before')?.style.setProperty('top', `${y - 100}px`);
-            });
-        });
-        
-        // Magnetic Effect for Social Icons
-        document.querySelectorAll('.magnetic-card').forEach(card => {
-            const icon = card.querySelector('.magnetic-icon');
-            
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                const distance = Math.sqrt(x * x + y * y);
-                const maxDistance = 100;
-                
-                if (distance < maxDistance) {
-                    const strength = (maxDistance - distance) / maxDistance;
-                    icon.style.transform = `translate(${x * strength * 0.3}px, ${y * strength * 0.3}px) scale(1.1)`;
-                }
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                icon.style.transform = 'translate(0, 0) scale(1)';
-            });
-        });
-        
-        // Counter Animation
-        function animateCounter(element) {
-            const target = parseInt(element.getAttribute('data-target'));
-            const duration = 2000;
-            const step = target / (duration / 16);
-            let current = 0;
-            
-            const timer = setInterval(() => {
-                current += step;
-                if (current >= target) {
-                    element.textContent = target.toLocaleString();
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current).toLocaleString();
-                }
-            }, 16);
-        }
-        
-        // Trigger counter animation on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const counters = entry.target.querySelectorAll('.stat-number[data-target]');
-                    counters.forEach(counter => {
-                        if (counter.textContent === '0') {
-                            animateCounter(counter);
-                        }
-                    });
-                }
-            });
-        }, { threshold: 0.5 });
-        
-        document.querySelectorAll('.bento-card').forEach(card => {
-            if (card.querySelector('.stat-number[data-target]')) {
-                observer.observe(card);
-            }
-        });
-        
-        // Scroll Progress
-        window.addEventListener('scroll', () => {
-            const scrollProgress = document.getElementById('scroll-progress');
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrollPercentage = (scrollTop / scrollHeight) * 100;
-            scrollProgress.style.width = scrollPercentage + '%';
-        });
-    </script>
+  <div class="spotify">
+    <iframe 
+      style="border-radius:12px"
+      src="https://open.spotify.com/embed/playlist/55AzvgCu5D4WubbdPx1VOa?utm_source=generator&theme=0"
+      width="100%" height="352"
+      frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+
+</div>
+
+<script>
+const cursor=document.getElementById("cursor");
+
+document.addEventListener("mousemove",(e)=>{
+  cursor.style.left=e.clientX+"px";
+  cursor.style.top=e.clientY+"px";
+});
+</script>
+
 </body>
 </html>
