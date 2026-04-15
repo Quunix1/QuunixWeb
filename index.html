@@ -2,675 +2,429 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sana Bir Mesajım Var</title>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quunix</title>
+
+<link rel="icon" href="pp.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-    :root {
-        --primary: #10b981;
-        --primary-glow: rgba(16, 185, 129, 0.6);
-        --primary-light: #34d399;
-        --danger: #ef4444;
-        --bg-dark: #020617;
-        --glass-bg: rgba(15, 23, 42, 0.5);
-        --glass-border: rgba(255, 255, 255, 0.1);
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+html,body{
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  touch-action:manipulation;
+}
 
-    body {
-        background-color: var(--bg-dark);
-        background-image: 
-            radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.1), transparent 30%),
-            radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 30%);
-        height: 100vh;
-        height: 100dvh; /* Mobilde adres çubuğu hesabı için */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #f8fafc;
-        overflow: hidden;
-        font-family: 'Inter', sans-serif;
-        position: relative;
-    }
+body{
+  font-family:Inter;
+  background:black;
+  color:white;
+  overflow-x:hidden;
+}
 
-    /* Arkaplan Işıkları */
-    .ambient-light {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.6;
-        animation: float 12s infinite ease-in-out alternate;
-        z-index: 0;
-        pointer-events: none;
-    }
-    .light-1 { width: 50vw; height: 50vw; max-width: 400px; max-height: 400px; background: rgba(16, 185, 129, 0.15); top: -10%; left: -10%; }
-    .light-2 { width: 60vw; height: 60vw; max-width: 500px; max-height: 500px; background: rgba(139, 92, 246, 0.12); bottom: -20%; right: -10%; animation-delay: -6s; }
+/* BACKGROUND */
+.bg{
+  position:fixed;
+  inset:0;
+  background:url("banner.png") center/cover no-repeat;
+  filter:brightness(0.35) saturate(1.3) blur(2px);
+  transform:scale(1.08);
+  z-index:-2;
+}
 
-    @keyframes float {
-        0% { transform: translate(0, 0) scale(1); }
-        100% { transform: translate(30px, 50px) scale(1.1); }
-    }
+.overlay{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top, rgba(0,200,255,0.25), transparent 60%),
+    radial-gradient(circle at bottom, rgba(120,220,255,0.15), transparent 60%);
+  z-index:-1;
+}
 
-    .container {
-        width: 100%;
-        max-width: 500px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        z-index: 10;
-        padding: 20px;
-        perspective: 1000px;
-        overflow-y: auto; /* Mobilde taşmaları önler */
-        overflow-x: hidden;
-    }
+/* HERO */
+.hero{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+}
 
-    /* --- ORTAK SAYFA AYARLARI --- */
-    .page {
-        flex: 1;
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        opacity: 0;
-        transform: translateY(40px) scale(0.95);
-        transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        width: 100%;
-        min-height: 100%;
-        padding-bottom: 20px;
-    }
-    .page.active { 
-        display: flex; 
-        opacity: 1; 
-        transform: translateY(0) scale(1); 
-    }
+.pfp{
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #7dd3fc;
+  box-shadow:0 0 30px #38bdf8;
+}
 
-    /* --- SAYFA 1: TERMINAL --- */
-    .terminal-window {
-        background: rgba(4, 6, 12, 0.85);
-        border: 1px solid var(--glass-border);
-        border-radius: 16px;
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        height: 65vh;
-        max-height: 600px;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        position: relative;
-        margin-top: auto;
-        margin-bottom: auto;
-    }
+.name{
+  font-family:Orbitron;
+  font-size:65px;
+  color:#7dd3fc;
+  text-shadow:0 0 20px #38bdf8;
+}
 
-    .terminal-window::before {
-        content: " ";
-        display: block;
-        position: absolute;
-        top: 0; left: 0; bottom: 0; right: 0;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        z-index: 2;
-        background-size: 100% 4px, 6px 100%;
-        pointer-events: none;
-        animation: flicker 0.15s infinite;
-        opacity: 0.7;
-    }
+.scroll{
+  position:absolute;
+  bottom:20px;
+  font-size:24px;
+  opacity:0.6;
+}
 
-    @keyframes flicker {
-        0% { opacity: 0.65; }
-        50% { opacity: 0.75; }
-        100% { opacity: 0.65; }
-    }
+/* WORDLE */
+.wordle{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  padding:20px;
+}
 
-    .terminal-header {
-        background: rgba(0, 0, 0, 0.6);
-        padding: 12px 16px;
-        display: flex;
-        gap: 8px;
-        border-bottom: 1px solid var(--glass-border);
-        align-items: center;
-    }
+.title{
+  font-size:20px;
+  color:#7dd3fc;
+}
 
-    .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
-    .dot.red { background: #ff5f56; }
-    .dot.yellow { background: #ffbd2e; }
-    .dot.green { background: #27c93f; }
+/* BOARD */
+.board{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
 
-    #terminal-content {
-        padding: 20px;
-        overflow-y: auto;
-        flex: 1;
-        font-family: 'Fira Code', monospace;
-        font-size: 14px;
-        color: #6ee7b7;
-        text-shadow: 0 0 6px rgba(110, 231, 183, 0.5);
-        z-index: 3;
-        position: relative;
-    }
+.row{
+  display:flex;
+  gap:7px;
+  justify-content:center;
+  animation:rowPop 0.2s ease;
+}
 
-    .line { margin-bottom: 12px; line-height: 1.6; letter-spacing: 0.5px; }
-    
-    .cursor {
-        display: inline-block;
-        width: 8px;
-        height: 16px;
-        background-color: var(--primary);
-        vertical-align: middle;
-        animation: blink 1s step-end infinite;
-        margin-left: 4px;
-        box-shadow: 0 0 8px var(--primary);
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    
-    .inputLine { display: flex; align-items: center; margin-top: 15px; flex-wrap: wrap; }
-    .inputLine span.prompt { color: var(--primary-light); margin-right: 10px; font-weight: 700; word-break: break-all;}
-    .inputLine input {
-        flex: 1; min-width: 100px; background: transparent; border: none; color: #fff;
-        font-family: 'Fira Code', monospace; font-size: 14px; outline: none;
-        caret-color: transparent; 
-        text-shadow: 0 0 8px rgba(255,255,255,0.6);
-    }
+@keyframes rowPop{
+  0%{transform:scale(0.9);opacity:0.4;}
+  100%{transform:scale(1);opacity:1;}
+}
 
-    /* --- SAYFA 2: SEÇİM --- */
-    h2 { 
-        text-align: center; font-size: 30px; margin-bottom: 30px; 
-        font-weight: 900; letter-spacing: -0.5px;
-        background: linear-gradient(to right, #ffffff, #a7f3d0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
-    }
+/* TILE */
+.tile{
+  width:56px;
+  height:56px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  font-weight:bold;
+  border-radius:12px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  text-transform:uppercase;
+  transition:0.2s;
+}
 
-    .choiceBox { display: flex; flex-direction: column; gap: 20px; width: 100%; margin-bottom: 30px; }
+/* ONLY GREEN EFFECT */
+.green{
+  background:#22c55e;
+  animation:popGreen 0.25s ease;
+}
 
-    .card {
-        flex: 1; padding: 15px; border-radius: 20px;
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        backdrop-filter: blur(16px);
-        text-align: center; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex; flex-direction: column; align-items: center;
-        position: relative;
-        overflow: hidden;
-    }
+@keyframes popGreen{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.12);}
+  100%{transform:scale(1);}
+}
 
-    .card::before {
-        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
-        pointer-events: none;
-    }
+.yellow{background:#eab308;}
+.gray{background:#6b7280;}
 
-    .card.activeCard {
-        background: rgba(16, 185, 129, 0.08);
-        border-color: rgba(16, 185, 129, 0.4);
-        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2), inset 0 0 15px rgba(16, 185, 129, 0.1);
-    }
+/* KEYBOARD (WORDLE STYLE) */
+.keyboard{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:10px;
+}
 
-    .card.disabled { opacity: 0.6; filter: grayscale(80%) contrast(0.9); }
+/* ROWS */
+.krow{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
 
-    .card div { margin-bottom: 12px; font-size: 15px; font-weight: 700; color: #f1f5f9; z-index: 2; }
+/* KEY */
+.key{
+  padding:12px;
+  min-width:34px;
+  border-radius:8px;
+  border:none;
+  background:#111;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:0.2s;
+}
 
-    .card img {
-        width: 100%; max-height: 200px; object-fit: contain;
-        border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        z-index: 2; position: relative;
-        background: #1e293b;
-    }
+/* ripple */
+.ripple{
+  position:absolute;
+  width:80px;
+  height:80px;
+  background:rgba(125,211,252,0.5);
+  border-radius:50%;
+  transform:scale(0);
+  animation:ripple 0.5s linear;
+  pointer-events:none;
+}
 
-    .nextBtn {
-        width: 100%; padding: 18px; border: none; border-radius: 16px;
-        background: linear-gradient(135deg, var(--primary), #059669);
-        color: white; font-size: 16px; font-weight: 800; font-family: 'Inter', sans-serif;
-        cursor: pointer; transition: all 0.3s ease;
-        box-shadow: 0 10px 25px var(--primary-glow);
-        text-transform: uppercase; letter-spacing: 1px;
-        position: relative;
-        overflow: hidden;
-        margin-top: auto;
-    }
+@keyframes ripple{
+  to{
+    transform:scale(3);
+    opacity:0;
+  }
+}
 
-    /* --- SAYFA 3: ASIL SORU --- */
-    #p3 { text-align: center; z-index: 20; justify-content: center; }
-    #p3 h2 { font-size: 36px; text-shadow: 0 0 30px rgba(255,255,255,0.3); margin-bottom: 40px; }
-    
-    .buttons { 
-        display: flex; 
-        flex-direction: column; /* Mobilde alt alta durması için */
-        align-items: center;
-        justify-content: center; 
-        gap: 20px; /* Güvenli boşluk */
-        width: 100%;
-        position: relative;
-    }
+/* highlight keys */
+.goodKey{
+  background:#22c55e !important;
+}
 
-    .action-btn {
-        width: 100%; 
-        max-width: 280px; /* Çok uzamasını engelle */
-        padding: 18px 40px; border: none; border-radius: 100px;
-        color: #fff; font-size: 20px; font-weight: 800; cursor: pointer;
-        font-family: 'Inter', sans-serif;
-        display: flex; align-items: center; justify-content: center;
-    }
+.presentKey{
+  background:#eab308 !important;
+}
 
-    #yes {
-        background: linear-gradient(135deg, #10b981, #047857);
-        box-shadow: 0 0 30px var(--primary-glow), inset 0 2px 0 rgba(255,255,255,0.2);
-        z-index: 10;
-        position: relative;
-        animation: pulseHeart 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-        transition: transform 0.2s;
-    }
+/* MOBILE */
+@media(max-width:600px){
+  .name{font-size:40px;}
+  .tile{width:44px;height:44px;font-size:18px;}
+  .key{padding:10px;min-width:30px;font-size:14px;}
+}
 
-    #no {
-        background: linear-gradient(135deg, var(--danger), #991b1b);
-        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4), inset 0 2px 0 rgba(255,255,255,0.2);
-        z-index: 50;
-        /* Başlangıçta normal akışta. Kaçarken absolute/fixed olacak */
-        transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    @keyframes pulseHeart {
-        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-        70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-    }
-
-    /* --- SONUÇ EKRANI --- */
-    .result {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        display: none; flex-direction: column; justify-content: center; align-items: center;
-        background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        opacity: 0; transform: scale(1.05); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 100;
-        padding: 20px;
-    }
-
-    .result.show { opacity: 1; transform: scale(1); display: flex; }
-
-    .result-content {
-        text-align: center;
-        animation: dropIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        opacity: 0;
-        transform: translateY(-50px) scale(0.9);
-        z-index: 101;
-    }
-
-    @keyframes dropIn {
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .result img {
-        width: 220px; height: 220px; object-fit: cover;
-        border-radius: 50%; border: 6px solid var(--primary);
-        box-shadow: 0 0 60px var(--primary-glow), inset 0 0 15px rgba(0,0,0,0.5);
-        margin-bottom: 25px;
-        animation: heartbeat 1.5s infinite alternate;
-    }
-
-    @keyframes heartbeat {
-        0% { transform: scale(1); }
-        100% { transform: scale(1.05); }
-    }
-
-    .result .big { 
-        font-size: 42px; font-weight: 900; color: #fff; margin-bottom: 10px; 
-        text-shadow: 0 0 25px var(--primary-glow);
-    }
-    .result .desc { font-size: 20px; color: #a7f3d0; font-weight: 600; }
-
-    .particle-heart {
-        position: fixed; pointer-events: none; z-index: 99;
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%2310b981' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3e%3c/svg%3e");
-        background-size: contain;
-        background-repeat: no-repeat;
-    }
-
-    /* MOBİL VE TABLET UYARLAMALARI (MEDIA QUERIES) */
-    @media (min-width: 480px) {
-        .choiceBox { flex-direction: row; }
-        .buttons { flex-direction: row; }
-        .action-btn { width: auto; }
-        #p3 h2 { font-size: 42px; }
-        .result img { width: 260px; height: 260px; }
-        .result .big { font-size: 52px; }
-    }
 </style>
 </head>
 
 <body>
 
-<div class="ambient-light light-1"></div>
-<div class="ambient-light light-2"></div>
+<div class="bg"></div>
+<div class="overlay"></div>
 
-<div class="container" id="app">
-
-    <div id="p1" class="page active">
-        <div class="terminal-window">
-            <div class="terminal-header">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-            <div id="terminal-content"></div>
-        </div>
-    </div>
-
-    <div id="p2" class="page">
-        <h2>Seçiminin Sonuçları</h2>
-        <div class="choiceBox">
-            <div class="card activeCard">
-                <div>"Evet" dersen Kaori</div>
-                <img src="mutsuz.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
-            </div>
-            <div class="card disabled">
-                <div>"Hayır" dersen Kaori</div>
-                <img src="mutlu.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
-            </div>
-        </div>
-        <button class="nextBtn" id="next">Riski Anladım, Devam Et</button>
-    </div>
-
-    <div id="p3" class="page">
-        <h2>Benimle çıkar mısın?</h2>
-        <div class="buttons">
-            <button class="action-btn" id="yes">Evet</button>
-            <button class="action-btn" id="no">Hayır</button>
-        </div>
-    </div>
-
+<div class="hero">
+  <img src="pp.png" class="pfp">
+  <div class="name">Quunix</div>
+  <div class="scroll">↓</div>
 </div>
 
-<div class="result" id="result">
-    <div class="result-content">
-        <img src="mutsuz.png" alt="Sonuç" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2310b981\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3ccircle cx=\'12\' cy=\'12\' r=\'10\'/%3e%3cpath d=\'M8 14s1.5 2 4 2 4-2 4-2\'/%3e%3cline x1=\'9\' y1=\'9\' x2=\'9.01\' y2=\'9\'/%3e%3cline x1=\'15\' y1=\'9\' x2=\'15.01\' y2=\'9\'/%3e%3c/svg%3e'">
-        <div class="big">:)</div>
-        <div class="desc">Wp gel balim</div>
-    </div>
+<div class="wordle">
+  <div class="title">Bir kelime...</div>
+  <div class="board" id="board"></div>
+  <div class="keyboard" id="keyboard"></div>
 </div>
 
 <script>
-    const terminal = document.getElementById("terminal-content");
-    const app = document.getElementById("app");
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
 
-    // SAYFA GEÇİŞİ
-    function showPage(id) {
-        const activePage = document.querySelector(".page.active");
-        if(activePage) {
-            activePage.style.opacity = "0";
-            activePage.style.transform = "translateY(-30px) scale(0.95)";
-            setTimeout(() => {
-                activePage.classList.remove("active");
-                const nextPage = document.getElementById(id);
-                nextPage.classList.add("active");
-            }, 400); 
-        } else {
-            document.getElementById(id).classList.add("active");
-        }
+const WORD="OYKU";
+const ROWS=6;
+const COLS=4;
+
+let row=0;
+let col=0;
+let locked=false;
+
+let board=Array.from({length:ROWS},()=>Array(COLS).fill(""));
+
+const boardEl=document.getElementById("board");
+const keyboardEl=document.getElementById("keyboard");
+
+/* BOARD */
+function initBoard(){
+  for(let r=0;r<ROWS;r++){
+    let rowEl=document.createElement("div");
+    rowEl.className="row";
+
+    for(let c=0;c<COLS;c++){
+      let t=document.createElement("div");
+      t.className="tile";
+      t.id=`cell-${r}-${c}`;
+      rowEl.appendChild(t);
     }
 
-    // TERMINAL DAKTİLO EFEKTİ
-    async function typeText(text, speed = 35) {
-        return new Promise(resolve => {
-            const line = document.createElement("div");
-            line.className = "line";
-            
-            const oldCursor = document.querySelector('.cursor');
-            if(oldCursor) oldCursor.remove();
+    boardEl.appendChild(rowEl);
+  }
+}
 
-            terminal.appendChild(line);
-            let i = 0;
-            
-            const cursor = document.createElement("span");
-            cursor.className = "cursor";
-            
-            const interval = setInterval(() => {
-                line.innerHTML = text.substring(0, i + 1);
-                line.appendChild(cursor);
-                i++;
-                
-                terminal.scrollTop = terminal.scrollHeight;
-                
-                if (i >= text.length) {
-                    clearInterval(interval);
-                    setTimeout(resolve, Math.random() * 200 + 100);
-                }
-            }, speed + (Math.random() * 20 - 10)); 
-        });
+/* KEYBOARD (NORMAL TR QWERTY LAYOUT) */
+const layout=[
+  ["Q","W","E","R","T","Y","U","I","O","P"],
+  ["A","S","D","F","G","H","J","K","L"],
+  ["Z","X","C","V","B","N","M"]
+];
+
+function initKeyboard(){
+  layout.forEach(row=>{
+    let r=document.createElement("div");
+    r.className="krow";
+
+    row.forEach(k=>{
+      let b=document.createElement("button");
+      b.className="key";
+      b.innerText=k;
+
+      b.onclick=(e)=>{
+        ripple(e,b);
+        press(k);
+      };
+
+      r.appendChild(b);
+    });
+
+    keyboardEl.appendChild(r);
+  });
+
+  let last=document.createElement("div");
+  last.className="krow";
+
+  let enter=document.createElement("button");
+  enter.className="key";
+  enter.innerText="ENTER";
+  enter.onclick=check;
+
+  let del=document.createElement("button");
+  del.className="key";
+  del.innerText="⌫";
+  del.onclick=back;
+
+  last.appendChild(enter);
+  last.appendChild(del);
+
+  keyboardEl.appendChild(last);
+}
+
+/* ripple */
+function ripple(e,btn){
+  let s=document.createElement("span");
+  s.className="ripple";
+
+  let rect=btn.getBoundingClientRect();
+  s.style.left=(e.clientX-rect.left)+"px";
+  s.style.top=(e.clientY-rect.top)+"px";
+
+  btn.appendChild(s);
+  setTimeout(()=>s.remove(),500);
+}
+
+/* input */
+document.addEventListener("keydown",(e)=>{
+  if(locked) return;
+
+  let k=e.key.toUpperCase();
+
+  if(k==="ENTER") check();
+  else if(k==="BACKSPACE") back();
+  else if(/^[A-ZÇŞİĞÜÖ]$/.test(k)) press(k);
+});
+
+function press(k){
+  if(locked) return;
+  if(col<COLS && row<ROWS){
+    board[row][col]=k;
+
+    let cell=document.getElementById(`cell-${row}-${col}`);
+    cell.innerText=k;
+
+    col++;
+  }
+}
+
+function back(){
+  if(locked) return;
+  if(col>0){
+    col--;
+    board[row][col]="";
+    document.getElementById(`cell-${row}-${col}`).innerText="";
+  }
+}
+
+/* keyboard highlight */
+function markKey(letter,type){
+  document.querySelectorAll(".key").forEach(k=>{
+    if(k.innerText===letter){
+      if(type==="green") k.classList.add("goodKey");
+      if(type==="yellow") k.classList.add("presentKey");
+    }
+  });
+}
+
+/* check */
+function check(){
+  if(locked) return;
+  if(col<COLS) return;
+
+  let guess=board[row].join("");
+  let used=Array(COLS).fill(false);
+
+  let cells=[];
+
+  for(let i=0;i<COLS;i++){
+    let c=document.getElementById(`cell-${row}-${i}`);
+    cells.push(c);
+
+    if(guess[i]===WORD[i]){
+      c.classList.add("green");
+      used[i]=true;
+      markKey(guess[i],"green");
+    }
+  }
+
+  for(let i=0;i<COLS;i++){
+    let c=cells[i];
+    if(c.classList.contains("green")) continue;
+
+    let found=false;
+
+    for(let j=0;j<COLS;j++){
+      if(!used[j] && guess[i]===WORD[j]){
+        found=true;
+        used[j]=true;
+        break;
+      }
     }
 
-    // TERMINAL INPUT (Mobil Klavye Korumalı)
-    function awaitInput(promptText) {
-        return new Promise(resolve => {
-            const oldCursor = document.querySelector('.cursor');
-            if(oldCursor) oldCursor.remove();
-
-            const wrap = document.createElement("div");
-            wrap.className = "inputLine";
-            
-            const span = document.createElement("span");
-            span.className = "prompt";
-            span.innerText = "root@kalp:~# " + promptText;
-            
-            const inputContainer = document.createElement("div");
-            inputContainer.style.position = "relative";
-            inputContainer.style.flex = "1";
-            inputContainer.style.display = "flex";
-            inputContainer.style.alignItems = "center";
-
-            const input = document.createElement("input");
-            input.type = "text";
-            input.autocomplete = "off";
-            input.style.width = "100%";
-            
-            const fakeCursor = document.createElement("span");
-            fakeCursor.className = "cursor";
-            fakeCursor.style.position = "absolute";
-            
-            inputContainer.appendChild(input);
-            inputContainer.appendChild(fakeCursor);
-
-            wrap.appendChild(span);
-            wrap.appendChild(inputContainer);
-            terminal.appendChild(wrap);
-            
-            // Mobilde klavye açılınca scroll'u ayarla
-            setTimeout(() => {
-                input.focus();
-                terminal.scrollTop = terminal.scrollHeight;
-            }, 100);
-
-            const updateCursor = () => {
-                fakeCursor.style.left = (input.value.length * 8.5) + "px"; 
-            };
-            input.addEventListener("input", updateCursor);
-
-            input.onkeydown = (e) => {
-                if (e.key === "Enter" && input.value.trim() !== "") {
-                    const val = input.value.trim().toLowerCase();
-                    input.disabled = true;
-                    fakeCursor.remove(); 
-                    
-                    wrap.innerHTML = `<span class="prompt">root@kalp:~# ${promptText}</span><span style="color:#fff">${input.value}</span>`;
-                    resolve(val);
-                }
-            };
-            
-            document.addEventListener('click', () => { 
-                if(document.querySelector(".page.active").id === "p1") input.focus(); 
-            });
-        });
+    if(found){
+      c.classList.add("yellow");
+      markKey(guess[i],"yellow");
     }
-
-    // TERMINAL SENARYOSU
-    async function startTerminal() {
-        await new Promise(r => setTimeout(r, 600));
-        await typeText("Sistem başlatılıyor...", 30);
-        await typeText("[OK] Duygu modülleri yüklendi.", 20);
-        await typeText("[OK] Kritik soru paketleri açılıyor...", 25);
-        await typeText("Uyarı: Bu işlemin geri dönüşü yoktur.", 40);
-        
-        let ans1 = "";
-        while (ans1 !== "y" && ans1 !== "evet") {
-            ans1 = await awaitInput("Devam edilsin mi? (y/n): ");
-        }
-
-        await typeText("Bağlantı kuruluyor...", 30);
-        
-        let ans2 = "";
-        while (ans2 !== "y" && ans2 !== "evet") {
-            ans2 = await awaitInput("Gerçekten hazır mısın? (y/n): ");
-        }
-
-        await typeText("Arayüze geçiliyor... Lütfen bekleyin.", 25);
-        setTimeout(() => showPage("p2"), 1000);
+    else{
+      c.classList.add("gray");
     }
+  }
 
-    // SAYFA 2 İŞLEMLERİ
-    document.getElementById("next").onclick = () => {
-        showPage("p3");
-    };
+  row++;
+  col=0;
 
-    // HAYIR BUTONU KAÇIŞ MANTIĞI (Üst üste binme korumalı)
-    function escapeBtn() {
-        // Eğer ilk defa kaçıyorsa, mevcut konumunu sabitle ki "0,0" noktasından uçarak gelmesin
-        if (noBtn.style.position !== "fixed") {
-            const rect = noBtn.getBoundingClientRect();
-            noBtn.style.left = rect.left + "px";
-            noBtn.style.top = rect.top + "px";
-            noBtn.style.position = "fixed";
-            noBtn.style.margin = "0";
-            // Sabit genişlik ver ki flex'ten çıkınca boyutu bozulmasın
-            noBtn.style.width = rect.width + "px"; 
-            noBtn.style.height = rect.height + "px";
-        }
+  if(guess===WORD){
+    locked=true;
+  }
 
-        const btnWidth = noBtn.offsetWidth;
-        const btnHeight = noBtn.offsetHeight;
-        const padding = 20; 
-        
-        const maxX = window.innerWidth - btnWidth - padding;
-        const maxY = window.innerHeight - btnHeight - padding;
+  if(row===ROWS){
+    locked=true;
+  }
+}
 
-        // Evet butonunun GÜNCEL konumunu alıyoruz
-        const yesRect = yesBtn.getBoundingClientRect();
-        const safeZone = 25; // Evet butonunun etrafındaki ekstra güvenli alan (Çakışmayı önler)
-
-        let randomX, randomY;
-        let overlap = true;
-        let attempts = 0;
-
-        // Rastgele yer seç, eğer Evet butonuyla çakışıyorsa yeniden seç
-        while(overlap && attempts < 50) {
-            randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-
-            // Çarpışma Testi (AABB Collision Detection)
-            const isCollidingX = randomX < (yesRect.right + safeZone) && (randomX + btnWidth) > (yesRect.left - safeZone);
-            const isCollidingY = randomY < (yesRect.bottom + safeZone) && (randomY + btnHeight) > (yesRect.top - safeZone);
-
-            if (!(isCollidingX && isCollidingY)) {
-                overlap = false; // Çakışma yok, döngüden çık
-            }
-            attempts++;
-        }
-
-        noBtn.style.left = randomX + "px";
-        noBtn.style.top = randomY + "px";
-        noBtn.style.right = "auto";
-        noBtn.style.bottom = "auto";
-    }
-
-    // Mobilde dokunmatik için touchstart (hızlı tepki)
-    noBtn.addEventListener("touchstart", (e) => {
-        e.preventDefault(); 
-        escapeBtn();
-    }, {passive: false});
-    
-    // PC için mouseenter
-    noBtn.addEventListener("mouseenter", escapeBtn);
-    noBtn.addEventListener("click", escapeBtn); 
-
-    // KALP PATLAMASI (Fizik tabanlı)
-    function createPhysicsExplosion() {
-        const heartCount = window.innerWidth < 480 ? 60 : 100; // Mobilde kasmaması için partikül sayısını optimize et
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2; 
-
-        for (let i = 0; i < heartCount; i++) {
-            const heart = document.createElement("div");
-            heart.className = "particle-heart";
-            
-            const size = Math.random() * 20 + 10;
-            heart.style.width = size + "px";
-            heart.style.height = size + "px";
-            
-            if(Math.random() > 0.7) heart.style.filter = "brightness(1.5)";
-
-            heart.style.left = centerX - (size/2) + "px";
-            heart.style.top = centerY - (size/2) + "px";
-
-            document.body.appendChild(heart);
-
-            const angle = Math.random() * Math.PI * 2;
-            const velocity = Math.random() * 20 + 10;
-            
-            let vx = Math.cos(angle) * velocity;
-            let vy = Math.sin(angle) * velocity - 15; 
-            let rotation = Math.random() * 360;
-            let rotationSpeed = (Math.random() - 0.5) * 20;
-            
-            let x = 0;
-            let y = 0;
-            let opacity = 1;
-
-            const gravity = 0.5;
-            const friction = 0.95;
-
-            function animate() {
-                if(opacity <= 0) {
-                    heart.remove();
-                    return;
-                }
-
-                vy += gravity; 
-                vx *= friction; 
-                vy *= friction;
-                
-                x += vx;
-                y += vy;
-                rotation += rotationSpeed;
-
-                if(y > window.innerHeight / 3) opacity -= 0.02;
-
-                heart.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
-                heart.style.opacity = opacity;
-
-                requestAnimationFrame(animate);
-            }
-            
-            requestAnimationFrame(animate);
-        }
-    }
-
-    // EVET BUTONU TIKLAMASI
-    yesBtn.onclick = () => {
-        document.body.style.background = "#fff";
-        setTimeout(() => document.body.style.background = "var(--bg-dark)", 100);
-        
-        const resultScreen = document.getElementById("result");
-        resultScreen.classList.add("show");
-        
-        createPhysicsExplosion();
-        setTimeout(createPhysicsExplosion, 500);
-        setTimeout(createPhysicsExplosion, 1200);
-    };
-
-    // Uygulamayı Başlat
-    startTerminal();
+/* start */
+initBoard();
+initKeyboard();
 
 </script>
 
