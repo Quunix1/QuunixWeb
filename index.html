@@ -150,11 +150,18 @@
     .inputLine { display: flex; align-items: center; margin-top: 15px; }
     .inputLine span { color: var(--primary); margin-right: 10px; font-weight: 700; }
     .inputLine input {
-        flex: 1; background: transparent; border: none; color: #fff;
-        font-family: 'Fira Code', monospace; font-size: 14px; outline: none;
-        caret-color: transparent; /* Özel imlecimiz olduğu için gerçeğini gizledik */
-        text-shadow: 0 0 5px rgba(255,255,255,0.5);
-    }
+    flex: 1; 
+    background: transparent; 
+    border: none; 
+    color: #fff;
+    font-family: 'Fira Code', monospace; 
+    font-size: 14px; 
+    outline: none;
+    caret-color: transparent;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+    padding: 0; /* Ekstra boşlukları sıfırla */
+    margin: 0;
+}
 
     /* --- SAYFA 2: SEÇİM --- */
     h2 { 
@@ -323,11 +330,11 @@
         <div class="choiceBox">
             <div class="card activeCard">
                 <div>"Evet" dersen Kaori</div>
-                <img src="mutlu.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+                <img src="mutsuz.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
             </div>
             <div class="card disabled">
                 <div>"Hayır" dersen Kaori</div>
-                <img src="mutsuz.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+                <img src="mutlu.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
             </div>
         </div>
         <button class="nextBtn" id="next">Riski Anladım, Devam Et</button>
