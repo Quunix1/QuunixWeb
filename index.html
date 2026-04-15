@@ -362,11 +362,11 @@
         <div class="choiceBox">
             <div class="card activeCard">
                 <div>"Evet" dersen Kaori</div>
-                <img src="mutlu.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+                <img src="mutsuz.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
             </div>
             <div class="card disabled">
                 <div>"Hayır" dersen Kaori</div>
-                <img src="mutsuz.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+                <img src="mutlu.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
             </div>
         </div>
         <button class="nextBtn" id="next">Riski Anladım, Devam Et</button>
@@ -384,7 +384,7 @@
 
 <div class="result" id="result">
     <div class="result-content">
-        <img src="mutlu.png" alt="Sonuç" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+        <img src="mutsuz.png" alt="Sonuç" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
         <div class="big">Biliyordum!</div>
         <div class="desc">Wp gel balim :)</div>
     </div>
@@ -536,26 +536,34 @@
 
     // HAYIR BUTONU KAÇIŞ MANTIĞI (Üst üste binme korumalı)
     function escapeBtn() {
-        // Butonu akıştan koparıp serbest bırakıyoruz
-        noBtn.style.position = "fixed";
-        noBtn.style.margin = "0"; 
-        
+        // Eğer ilk defa kaçıyorsa, mevcut konumunu sabitle ki "0,0" noktasından uçarak gelmesin
+        if (noBtn.style.position !== "fixed") {
+            const rect = noBtn.getBoundingClientRect();
+            noBtn.style.left = rect.left + "px";
+            noBtn.style.top = rect.top + "px";
+            noBtn.style.position = "fixed";
+            noBtn.style.margin = "0";
+            // Sabit genişlik ver ki flex'ten çıkınca boyutu bozulmasın
+            noBtn.style.width = rect.width + "px"; 
+            noBtn.style.height = rect.height + "px";
+        }
+
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
-        const padding = 20; // Ekran kenar boşluğu
+        const padding = 20; 
         
         const maxX = window.innerWidth - btnWidth - padding;
         const maxY = window.innerHeight - btnHeight - padding;
 
-        // Evet butonunun o anki konumunu alıyoruz (Üzerine binmemesi için)
+        // Evet butonunun GÜNCEL konumunu alıyoruz
         const yesRect = yesBtn.getBoundingClientRect();
-        const safeZone = 15; // Evet butonunun etrafındaki ekstra güvenli alan
+        const safeZone = 25; // Evet butonunun etrafındaki ekstra güvenli alan (Çakışmayı önler)
 
         let randomX, randomY;
         let overlap = true;
         let attempts = 0;
 
-        // Rastgele yer seç, eğer Evet butonuyla çakışıyorsa yeniden seç (Max 50 deneme)
+        // Rastgele yer seç, eğer Evet butonuyla çakışıyorsa yeniden seç
         while(overlap && attempts < 50) {
             randomX = Math.max(padding, Math.floor(Math.random() * maxX));
             randomY = Math.max(padding, Math.floor(Math.random() * maxY));
