@@ -2,18 +2,19 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Sana Bir Mesajım Var</title>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
 <style>
     :root {
         --primary: #10b981;
-        --primary-glow: rgba(16, 185, 129, 0.5);
+        --primary-glow: rgba(16, 185, 129, 0.6);
+        --primary-light: #34d399;
         --danger: #ef4444;
         --bg-dark: #020617;
-        --glass-bg: rgba(15, 23, 42, 0.4);
-        --glass-border: rgba(255, 255, 255, 0.08);
+        --glass-bg: rgba(15, 23, 42, 0.5);
+        --glass-border: rgba(255, 255, 255, 0.1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,9 +22,10 @@
     body {
         background-color: var(--bg-dark);
         background-image: 
-            radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.08), transparent 25%),
-            radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
+            radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.1), transparent 30%),
+            radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 30%);
         height: 100vh;
+        height: 100dvh; /* Mobilde adres çubuğu hesabı için */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -33,17 +35,18 @@
         position: relative;
     }
 
-    /* Arkada uçuşan animasyonlu ışıklar */
+    /* Arkaplan Işıkları */
     .ambient-light {
         position: absolute;
         border-radius: 50%;
         filter: blur(80px);
-        opacity: 0.5;
-        animation: float 10s infinite ease-in-out alternate;
+        opacity: 0.6;
+        animation: float 12s infinite ease-in-out alternate;
         z-index: 0;
+        pointer-events: none;
     }
-    .light-1 { width: 300px; height: 300px; background: rgba(16, 185, 129, 0.15); top: -10%; left: -10%; }
-    .light-2 { width: 400px; height: 400px; background: rgba(139, 92, 246, 0.1); bottom: -20%; right: -10%; animation-delay: -5s; }
+    .light-1 { width: 50vw; height: 50vw; max-width: 400px; max-height: 400px; background: rgba(16, 185, 129, 0.15); top: -10%; left: -10%; }
+    .light-2 { width: 60vw; height: 60vw; max-width: 500px; max-height: 500px; background: rgba(139, 92, 246, 0.12); bottom: -20%; right: -10%; animation-delay: -6s; }
 
     @keyframes float {
         0% { transform: translate(0, 0) scale(1); }
@@ -52,14 +55,16 @@
 
     .container {
         width: 100%;
-        max-width: 480px;
-        height: 100vh;
+        max-width: 500px;
+        height: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
         z-index: 10;
         padding: 20px;
         perspective: 1000px;
+        overflow-y: auto; /* Mobilde taşmaları önler */
+        overflow-x: hidden;
     }
 
     /* --- ORTAK SAYFA AYARLARI --- */
@@ -69,11 +74,11 @@
         flex-direction: column;
         justify-content: center;
         opacity: 0;
-        transform: translateY(30px) scale(0.95);
-        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        position: absolute;
-        width: calc(100% - 40px);
-        height: calc(100vh - 40px);
+        transform: translateY(40px) scale(0.95);
+        transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        width: 100%;
+        min-height: 100%;
+        padding-bottom: 20px;
     }
     .page.active { 
         display: flex; 
@@ -83,20 +88,22 @@
 
     /* --- SAYFA 1: TERMINAL --- */
     .terminal-window {
-        background: rgba(9, 9, 11, 0.85);
+        background: rgba(4, 6, 12, 0.85);
         border: 1px solid var(--glass-border);
         border-radius: 16px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.05) inset;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         height: 65vh;
+        max-height: 600px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
         position: relative;
+        margin-top: auto;
+        margin-bottom: auto;
     }
 
-    /* Terminal Ekranı Scanline Efekti */
     .terminal-window::before {
         content: " ";
         display: block;
@@ -106,10 +113,18 @@
         z-index: 2;
         background-size: 100% 4px, 6px 100%;
         pointer-events: none;
+        animation: flicker 0.15s infinite;
+        opacity: 0.7;
+    }
+
+    @keyframes flicker {
+        0% { opacity: 0.65; }
+        50% { opacity: 0.75; }
+        100% { opacity: 0.65; }
     }
 
     .terminal-header {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
         padding: 12px 16px;
         display: flex;
         gap: 8px;
@@ -117,7 +132,7 @@
         align-items: center;
     }
 
-    .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
     .dot.red { background: #ff5f56; }
     .dot.yellow { background: #ffbd2e; }
     .dot.green { background: #27c93f; }
@@ -129,56 +144,51 @@
         font-family: 'Fira Code', monospace;
         font-size: 14px;
         color: #6ee7b7;
-        text-shadow: 0 0 5px rgba(110, 231, 183, 0.4);
+        text-shadow: 0 0 6px rgba(110, 231, 183, 0.5);
         z-index: 3;
         position: relative;
     }
 
-    .line { margin-bottom: 10px; line-height: 1.6; letter-spacing: 0.3px; }
+    .line { margin-bottom: 12px; line-height: 1.6; letter-spacing: 0.5px; }
     
     .cursor {
         display: inline-block;
         width: 8px;
-        height: 15px;
+        height: 16px;
         background-color: var(--primary);
         vertical-align: middle;
         animation: blink 1s step-end infinite;
-        margin-left: 2px;
+        margin-left: 4px;
+        box-shadow: 0 0 8px var(--primary);
     }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     
-    .inputLine { display: flex; align-items: center; margin-top: 15px; }
-    .inputLine span { color: var(--primary); margin-right: 10px; font-weight: 700; }
+    .inputLine { display: flex; align-items: center; margin-top: 15px; flex-wrap: wrap; }
+    .inputLine span.prompt { color: var(--primary-light); margin-right: 10px; font-weight: 700; word-break: break-all;}
     .inputLine input {
-    flex: 1; 
-    background: transparent; 
-    border: none; 
-    color: #fff;
-    font-family: 'Fira Code', monospace; 
-    font-size: 14px; 
-    outline: none;
-    caret-color: transparent;
-    text-shadow: 0 0 5px rgba(255,255,255,0.5);
-    padding: 0; /* Ekstra boşlukları sıfırla */
-    margin: 0;
-}
+        flex: 1; min-width: 100px; background: transparent; border: none; color: #fff;
+        font-family: 'Fira Code', monospace; font-size: 14px; outline: none;
+        caret-color: transparent; 
+        text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
 
     /* --- SAYFA 2: SEÇİM --- */
     h2 { 
-        text-align: center; font-size: 28px; margin-bottom: 30px; 
-        font-weight: 800; letter-spacing: -0.5px;
-        background: linear-gradient(to right, #fff, #a7f3d0);
+        text-align: center; font-size: 30px; margin-bottom: 30px; 
+        font-weight: 900; letter-spacing: -0.5px;
+        background: linear-gradient(to right, #ffffff, #a7f3d0);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        text-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
     }
 
-    .choiceBox { display: flex; gap: 20px; width: 100%; margin-bottom: 40px; }
+    .choiceBox { display: flex; flex-direction: column; gap: 20px; width: 100%; margin-bottom: 30px; }
 
     .card {
         flex: 1; padding: 15px; border-radius: 20px;
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(16px);
         text-align: center; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         display: flex; flex-direction: column; align-items: center;
         position: relative;
@@ -187,67 +197,81 @@
 
     .card::before {
         content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+        background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
         pointer-events: none;
     }
 
     .card.activeCard {
-        background: rgba(16, 185, 129, 0.05);
-        border-color: var(--primary);
-        box-shadow: 0 10px 40px var(--primary-glow), inset 0 0 20px rgba(16, 185, 129, 0.1);
-        transform: translateY(-10px) scale(1.02);
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2), inset 0 0 15px rgba(16, 185, 129, 0.1);
     }
 
-    .card.disabled { opacity: 0.4; filter: grayscale(100%) contrast(0.8); }
+    .card.disabled { opacity: 0.6; filter: grayscale(80%) contrast(0.9); }
 
-    .card div { margin-bottom: 15px; font-size: 14px; font-weight: 600; color: #f1f5f9; z-index: 2; }
+    .card div { margin-bottom: 12px; font-size: 15px; font-weight: 700; color: #f1f5f9; z-index: 2; }
 
     .card img {
-        width: 100%; aspect-ratio: 1/1; object-fit: cover;
-        border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        width: 100%; max-height: 200px; object-fit: contain;
+        border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         z-index: 2; position: relative;
-        background: #1e293b; /* Resim yüklenmezse arka plan */
+        background: #1e293b;
     }
 
     .nextBtn {
-        width: 100%; padding: 18px; border: none; border-radius: 14px;
+        width: 100%; padding: 18px; border: none; border-radius: 16px;
         background: linear-gradient(135deg, var(--primary), #059669);
         color: white; font-size: 16px; font-weight: 800; font-family: 'Inter', sans-serif;
         cursor: pointer; transition: all 0.3s ease;
         box-shadow: 0 10px 25px var(--primary-glow);
         text-transform: uppercase; letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+        margin-top: auto;
     }
-    .nextBtn:hover { transform: translateY(-2px); box-shadow: 0 15px 35px var(--primary-glow); }
-    .nextBtn:active { transform: scale(0.97); }
 
     /* --- SAYFA 3: ASIL SORU --- */
-    .buttons { position: relative; height: 200px; margin-top: 40px; display: flex; justify-content: center; gap: 25px; align-items: flex-start;}
+    #p3 { text-align: center; z-index: 20; justify-content: center; }
+    #p3 h2 { font-size: 36px; text-shadow: 0 0 30px rgba(255,255,255,0.3); margin-bottom: 40px; }
+    
+    .buttons { 
+        display: flex; 
+        flex-direction: column; /* Mobilde alt alta durması için */
+        align-items: center;
+        justify-content: center; 
+        gap: 20px; /* Güvenli boşluk */
+        width: 100%;
+        position: relative;
+    }
 
     .action-btn {
-        padding: 16px 40px; border: none; border-radius: 14px;
+        width: 100%; 
+        max-width: 280px; /* Çok uzamasını engelle */
+        padding: 18px 40px; border: none; border-radius: 100px;
         color: #fff; font-size: 20px; font-weight: 800; cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         font-family: 'Inter', sans-serif;
+        display: flex; align-items: center; justify-content: center;
     }
 
     #yes {
-        background: linear-gradient(135deg, var(--primary), #059669);
-        box-shadow: 0 10px 25px var(--primary-glow);
+        background: linear-gradient(135deg, #10b981, #047857);
+        box-shadow: 0 0 30px var(--primary-glow), inset 0 2px 0 rgba(255,255,255,0.2);
         z-index: 10;
-        animation: pulseHeart 2s infinite;
+        position: relative;
+        animation: pulseHeart 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        transition: transform 0.2s;
     }
-    #yes:hover { transform: scale(1.05) translateY(-2px); }
-    #yes:active { transform: scale(0.95); }
 
     #no {
-        background: linear-gradient(135deg, var(--danger), #b91c1c);
-        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-        position: absolute; /* Kaçabilmesi için mutlak pozisyon */
+        background: linear-gradient(135deg, var(--danger), #991b1b);
+        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4), inset 0 2px 0 rgba(255,255,255,0.2);
         z-index: 50;
+        /* Başlangıçta normal akışta. Kaçarken absolute/fixed olacak */
+        transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     @keyframes pulseHeart {
-        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
         70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
         100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
@@ -256,53 +280,61 @@
     .result {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         display: none; flex-direction: column; justify-content: center; align-items: center;
-        background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(20px);
+        background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        opacity: 0; transform: scale(1.1); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0; transform: scale(1.05); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 100;
+        padding: 20px;
     }
 
     .result.show { opacity: 1; transform: scale(1); display: flex; }
 
     .result-content {
         text-align: center;
-        animation: dropIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        animation-delay: 0.2s;
+        animation: dropIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         opacity: 0;
-        transform: translateY(-50px);
+        transform: translateY(-50px) scale(0.9);
+        z-index: 101;
     }
 
     @keyframes dropIn {
-        to { opacity: 1; transform: translateY(0); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .result img {
-        width: 250px; height: 250px; object-fit: cover;
+        width: 220px; height: 220px; object-fit: cover;
         border-radius: 50%; border: 6px solid var(--primary);
-        box-shadow: 0 0 60px var(--primary-glow);
-        margin-bottom: 30px;
+        box-shadow: 0 0 60px var(--primary-glow), inset 0 0 15px rgba(0,0,0,0.5);
+        margin-bottom: 25px;
+        animation: heartbeat 1.5s infinite alternate;
+    }
+
+    @keyframes heartbeat {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
     }
 
     .result .big { 
-        font-size: 42px; font-weight: 800; color: #fff; margin-bottom: 10px; 
-        text-shadow: 0 0 20px var(--primary-glow);
+        font-size: 42px; font-weight: 900; color: #fff; margin-bottom: 10px; 
+        text-shadow: 0 0 25px var(--primary-glow);
     }
-    .result .desc { font-size: 20px; color: #a7f3d0; font-weight: 500; }
+    .result .desc { font-size: 20px; color: #a7f3d0; font-weight: 600; }
 
-    /* EFEKTLER */
-    .heart {
+    .particle-heart {
         position: fixed; pointer-events: none; z-index: 99;
         background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%2310b981' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3e%3c/svg%3e");
         background-size: contain;
         background-repeat: no-repeat;
     }
 
-    .celebrate-flash {
-        animation: flashBg 1s ease-out forwards;
-    }
-    @keyframes flashBg {
-        0% { background: #fff; }
-        100% { background: var(--bg-dark); }
+    /* MOBİL VE TABLET UYARLAMALARI (MEDIA QUERIES) */
+    @media (min-width: 480px) {
+        .choiceBox { flex-direction: row; }
+        .buttons { flex-direction: row; }
+        .action-btn { width: auto; }
+        #p3 h2 { font-size: 42px; }
+        .result img { width: 260px; height: 260px; }
+        .result .big { font-size: 52px; }
     }
 </style>
 </head>
@@ -330,11 +362,11 @@
         <div class="choiceBox">
             <div class="card activeCard">
                 <div>"Evet" dersen Kaori</div>
-                <img src="mutsuz.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+                <img src="mutlu.png" alt="Mutlu" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDc1NTY5Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
             </div>
             <div class="card disabled">
                 <div>"Hayır" dersen Kaori</div>
-                <img src="mutlu.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
+                <img src="mutsuz.png" alt="Mutsuz" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUyOTNiIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+'">
             </div>
         </div>
         <button class="nextBtn" id="next">Riski Anladım, Devam Et</button>
@@ -344,7 +376,7 @@
         <h2>Benimle çıkar mısın?</h2>
         <div class="buttons">
             <button class="action-btn" id="yes">Evet</button>
-            <button class="action-btn" id="no" style="right: 0;">Hayır</button>
+            <button class="action-btn" id="no">Hayır</button>
         </div>
     </div>
 
@@ -362,10 +394,9 @@
     const terminal = document.getElementById("terminal-content");
     const app = document.getElementById("app");
     const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
 
-    let currentInput = null;
-
-    // SAYFA GEÇİŞİ (Yumuşatıldı)
+    // SAYFA GEÇİŞİ
     function showPage(id) {
         const activePage = document.querySelector(".page.active");
         if(activePage) {
@@ -375,19 +406,18 @@
                 activePage.classList.remove("active");
                 const nextPage = document.getElementById(id);
                 nextPage.classList.add("active");
-            }, 400); // CSS transition süresini bekle
+            }, 400); 
         } else {
             document.getElementById(id).classList.add("active");
         }
     }
 
-    // TERMINAL DAKTİLO EFEKTİ (Daha Gerçekçi)
+    // TERMINAL DAKTİLO EFEKTİ
     async function typeText(text, speed = 35) {
         return new Promise(resolve => {
             const line = document.createElement("div");
             line.className = "line";
             
-            // Mevcut imleci sil (varsa)
             const oldCursor = document.querySelector('.cursor');
             if(oldCursor) oldCursor.remove();
 
@@ -398,7 +428,6 @@
             cursor.className = "cursor";
             
             const interval = setInterval(() => {
-                // Karakterleri ekle, imleci sona taşı
                 line.innerHTML = text.substring(0, i + 1);
                 line.appendChild(cursor);
                 i++;
@@ -407,13 +436,13 @@
                 
                 if (i >= text.length) {
                     clearInterval(interval);
-                    setTimeout(resolve, Math.random() * 200 + 100); // Rastgele insanımsı duraksama
+                    setTimeout(resolve, Math.random() * 200 + 100);
                 }
-            }, speed + (Math.random() * 20 - 10)); // Rastgele hız değişimi
+            }, speed + (Math.random() * 20 - 10)); 
         });
     }
 
-    // TERMINAL INPUT FONKSİYONU (İmleç Korumalı)
+    // TERMINAL INPUT (Mobil Klavye Korumalı)
     function awaitInput(promptText) {
         return new Promise(resolve => {
             const oldCursor = document.querySelector('.cursor');
@@ -423,6 +452,7 @@
             wrap.className = "inputLine";
             
             const span = document.createElement("span");
+            span.className = "prompt";
             span.innerText = "root@kalp:~# " + promptText;
             
             const inputContainer = document.createElement("div");
@@ -436,7 +466,6 @@
             input.autocomplete = "off";
             input.style.width = "100%";
             
-            // Sahte imleç için element
             const fakeCursor = document.createElement("span");
             fakeCursor.className = "cursor";
             fakeCursor.style.position = "absolute";
@@ -447,12 +476,15 @@
             wrap.appendChild(span);
             wrap.appendChild(inputContainer);
             terminal.appendChild(wrap);
-            input.focus();
-            terminal.scrollTop = terminal.scrollHeight;
+            
+            // Mobilde klavye açılınca scroll'u ayarla
+            setTimeout(() => {
+                input.focus();
+                terminal.scrollTop = terminal.scrollHeight;
+            }, 100);
 
-            // İmleci yazının sonuna hizala
             const updateCursor = () => {
-                fakeCursor.style.left = (input.value.length * 8.4) + "px"; // 8.4px yaklaşık karakter genişliği fonta göre
+                fakeCursor.style.left = (input.value.length * 8.5) + "px"; 
             };
             input.addEventListener("input", updateCursor);
 
@@ -460,137 +492,173 @@
                 if (e.key === "Enter" && input.value.trim() !== "") {
                     const val = input.value.trim().toLowerCase();
                     input.disabled = true;
-                    fakeCursor.remove(); // Gönderilince imleci kaldır
+                    fakeCursor.remove(); 
                     
-                    // Gönderilen cevabı düz metin olarak satıra yazdırıp input'u gizleyelim (temiz görünüm)
-                    wrap.innerHTML = `<span>root@kalp:~# ${promptText}</span><span style="color:#fff">${input.value}</span>`;
-                    
+                    wrap.innerHTML = `<span class="prompt">root@kalp:~# ${promptText}</span><span style="color:#fff">${input.value}</span>`;
                     resolve(val);
                 }
             };
             
-            // Tıklayınca hep odakta kalsın
-            document.addEventListener('click', () => input.focus());
+            document.addEventListener('click', () => { 
+                if(document.querySelector(".page.active").id === "p1") input.focus(); 
+            });
         });
     }
 
     // TERMINAL SENARYOSU
     async function startTerminal() {
-        await new Promise(r => setTimeout(r, 800));
-        await typeText("Sistem başlatılıyor...", 40);
+        await new Promise(r => setTimeout(r, 600));
+        await typeText("Sistem başlatılıyor...", 30);
         await typeText("[OK] Duygu modülleri yüklendi.", 20);
-        await typeText("[OK] Kritik soru paketleri açılıyor...", 30);
-        await typeText("Uyarı: Bu işlemin geri dönüşü yoktur.", 60);
+        await typeText("[OK] Kritik soru paketleri açılıyor...", 25);
+        await typeText("Uyarı: Bu işlemin geri dönüşü yoktur.", 40);
         
         let ans1 = "";
         while (ans1 !== "y" && ans1 !== "evet") {
             ans1 = await awaitInput("Devam edilsin mi? (y/n): ");
         }
 
-        await typeText("Bağlantı kuruluyor...", 40);
+        await typeText("Bağlantı kuruluyor...", 30);
         
         let ans2 = "";
         while (ans2 !== "y" && ans2 !== "evet") {
             ans2 = await awaitInput("Gerçekten hazır mısın? (y/n): ");
         }
 
-        await typeText("Arayüze geçiliyor... Lütfen bekleyin.", 30);
+        await typeText("Arayüze geçiliyor... Lütfen bekleyin.", 25);
         setTimeout(() => showPage("p2"), 1000);
     }
 
     // SAYFA 2 İŞLEMLERİ
     document.getElementById("next").onclick = () => {
         showPage("p3");
-        // Sayfa 3 açıldığında butonu başlangıç pozisyonuna yerleştir
-        setTimeout(() => {
-            const yesBtn = document.getElementById("yes");
-            const yesRect = yesBtn.getBoundingClientRect();
-            // Hayır butonunu evetin yanına başlangıç olarak ayarla
-            noBtn.style.position = "absolute";
-            noBtn.style.left = "calc(50% + 10px)"; 
-            noBtn.style.top = "0";
-        }, 500);
     };
 
-    // KAÇAN "HAYIR" BUTONU MANTIĞI (Akıcı Kaçış)
+    // HAYIR BUTONU KAÇIŞ MANTIĞI (Üst üste binme korumalı)
     function escapeBtn() {
+        // Butonu akıştan koparıp serbest bırakıyoruz
         noBtn.style.position = "fixed";
+        noBtn.style.margin = "0"; 
         
-        // Güvenli alan hesaplama
-        const padding = 30;
-        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+        const btnWidth = noBtn.offsetWidth;
+        const btnHeight = noBtn.offsetHeight;
+        const padding = 20; // Ekran kenar boşluğu
         
-        const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-        const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+        const maxX = window.innerWidth - btnWidth - padding;
+        const maxY = window.innerHeight - btnHeight - padding;
+
+        // Evet butonunun o anki konumunu alıyoruz (Üzerine binmemesi için)
+        const yesRect = yesBtn.getBoundingClientRect();
+        const safeZone = 15; // Evet butonunun etrafındaki ekstra güvenli alan
+
+        let randomX, randomY;
+        let overlap = true;
+        let attempts = 0;
+
+        // Rastgele yer seç, eğer Evet butonuyla çakışıyorsa yeniden seç (Max 50 deneme)
+        while(overlap && attempts < 50) {
+            randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            // Çarpışma Testi (AABB Collision Detection)
+            const isCollidingX = randomX < (yesRect.right + safeZone) && (randomX + btnWidth) > (yesRect.left - safeZone);
+            const isCollidingY = randomY < (yesRect.bottom + safeZone) && (randomY + btnHeight) > (yesRect.top - safeZone);
+
+            if (!(isCollidingX && isCollidingY)) {
+                overlap = false; // Çakışma yok, döngüden çık
+            }
+            attempts++;
+        }
 
         noBtn.style.left = randomX + "px";
         noBtn.style.top = randomY + "px";
+        noBtn.style.right = "auto";
+        noBtn.style.bottom = "auto";
     }
 
-    // Hem üzerine gelince hem de dokununca kaçması
-    noBtn.addEventListener("mouseover", escapeBtn);
+    // Mobilde dokunmatik için touchstart (hızlı tepki)
     noBtn.addEventListener("touchstart", (e) => {
         e.preventDefault(); 
         escapeBtn();
-    });
-    noBtn.addEventListener("click", escapeBtn);
+    }, {passive: false});
+    
+    // PC için mouseenter
+    noBtn.addEventListener("mouseenter", escapeBtn);
+    noBtn.addEventListener("click", escapeBtn); 
 
-    // GELİŞMİŞ KALP PATLAMA EFEKTİ (Her yöne fışkıran kalpler)
-    function createHeartExplosion() {
-        const heartCount = 70; // Partikül sayısı
+    // KALP PATLAMASI (Fizik tabanlı)
+    function createPhysicsExplosion() {
+        const heartCount = window.innerWidth < 480 ? 60 : 100; // Mobilde kasmaması için partikül sayısını optimize et
         const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
+        const centerY = window.innerHeight / 2; 
 
         for (let i = 0; i < heartCount; i++) {
-            setTimeout(() => {
-                const heart = document.createElement("div");
-                heart.className = "heart";
+            const heart = document.createElement("div");
+            heart.className = "particle-heart";
+            
+            const size = Math.random() * 20 + 10;
+            heart.style.width = size + "px";
+            heart.style.height = size + "px";
+            
+            if(Math.random() > 0.7) heart.style.filter = "brightness(1.5)";
+
+            heart.style.left = centerX - (size/2) + "px";
+            heart.style.top = centerY - (size/2) + "px";
+
+            document.body.appendChild(heart);
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 20 + 10;
+            
+            let vx = Math.cos(angle) * velocity;
+            let vy = Math.sin(angle) * velocity - 15; 
+            let rotation = Math.random() * 360;
+            let rotationSpeed = (Math.random() - 0.5) * 20;
+            
+            let x = 0;
+            let y = 0;
+            let opacity = 1;
+
+            const gravity = 0.5;
+            const friction = 0.95;
+
+            function animate() {
+                if(opacity <= 0) {
+                    heart.remove();
+                    return;
+                }
+
+                vy += gravity; 
+                vx *= friction; 
+                vy *= friction;
                 
-                // Kalp boyutu (rastgele)
-                const size = Math.random() * 30 + 15;
-                heart.style.width = size + "px";
-                heart.style.height = size + "px";
+                x += vx;
+                y += vy;
+                rotation += rotationSpeed;
 
-                // Başlangıç noktası
-                heart.style.left = centerX - (size/2) + "px";
-                heart.style.top = centerY - (size/2) + "px";
+                if(y > window.innerHeight / 3) opacity -= 0.02;
 
-                document.body.appendChild(heart);
+                heart.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+                heart.style.opacity = opacity;
 
-                // Gidilecek rastgele hedef açı ve uzaklık
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = 100 + Math.random() * 400; // Ne kadar uzağa gidecek
-                
-                const tx = Math.cos(angle) * velocity;
-                const ty = Math.sin(angle) * velocity + 100; // Hafif yerçekimi etkisi için +100
-                const rotation = Math.random() * 360 - 180;
-
-                // Animasyonu başlat
-                requestAnimationFrame(() => {
-                    heart.style.transition = "all 1.5s cubic-bezier(0.1, 0.8, 0.3, 1)";
-                    heart.style.transform = `translate(${tx}px, ${ty}px) rotate(${rotation}deg) scale(0)`;
-                    heart.style.opacity = "0";
-                });
-
-                // Çöp toplama
-                setTimeout(() => heart.remove(), 1600);
-            }, i * 15); // Arka arkaya hızlıca çıkış
+                requestAnimationFrame(animate);
+            }
+            
+            requestAnimationFrame(animate);
         }
     }
 
-    // "EVET" BUTONUNA TIKLANINCA
-    document.getElementById("yes").onclick = () => {
-        document.body.classList.add("celebrate-flash");
+    // EVET BUTONU TIKLAMASI
+    yesBtn.onclick = () => {
+        document.body.style.background = "#fff";
+        setTimeout(() => document.body.style.background = "var(--bg-dark)", 100);
         
         const resultScreen = document.getElementById("result");
         resultScreen.classList.add("show");
         
-        // Büyük kalp patlaması
-        createHeartExplosion();
-        // 1 saniye sonra bir daha patlasın
-        setTimeout(createHeartExplosion, 800);
-        setTimeout(createHeartExplosion, 1600);
+        createPhysicsExplosion();
+        setTimeout(createPhysicsExplosion, 500);
+        setTimeout(createPhysicsExplosion, 1200);
     };
 
     // Uygulamayı Başlat
