@@ -6,17 +6,22 @@
 <title>Quunix</title>
 
 <link rel="icon" href="pp.png">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 body{
+  height:100vh;
+  overflow:hidden;
   font-family:Inter;
-  background:#02040a;
   color:white;
-  overflow-x:hidden;
+  background:#000;
 }
 
 /* BACKGROUND */
@@ -24,217 +29,97 @@ body{
   position:fixed;
   inset:0;
   background:url("banner.png") center/cover no-repeat;
-  filter:brightness(0.25) blur(4px);
-  transform:scale(1.15);
-  z-index:-3;
+  filter:brightness(0.35) saturate(1.3) blur(2px);
+  transform:scale(1.08);
 }
 
 .overlay{
   position:fixed;
   inset:0;
   background:
-    radial-gradient(circle at 20% 30%, rgba(0,200,255,0.25), transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(0,120,255,0.2), transparent 60%);
-  animation:bgMove 12s infinite alternate;
-  z-index:-2;
+    radial-gradient(circle at top, rgba(0,200,255,0.25), transparent 60%),
+    radial-gradient(circle at bottom, rgba(120,220,255,0.15), transparent 60%);
 }
 
-@keyframes bgMove{
-  from{transform:translateY(0);}
-  to{transform:translateY(-40px);}
-}
-
-/* MOUSE GLOW */
-.mouseGlow{
+/* CURSOR */
+.cursor{
   position:fixed;
-  width:500px;
-  height:500px;
-  background:radial-gradient(circle, rgba(56,189,248,0.25), transparent 70%);
-  pointer-events:none;
+  width:10px;
+  height:10px;
+  background:#7dd3fc;
+  border-radius:50%;
   transform:translate(-50%,-50%);
-  z-index:-1;
-  filter:blur(20px);
+  pointer-events:none;
+  box-shadow:0 0 20px #38bdf8;
 }
 
-/* HERO */
-.hero{
+/* CENTER */
+.wrap{
+  position:relative;
   height:100vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:25px;
+  gap:40px;
   text-align:center;
 }
 
+/* PROFILE */
 .pfp{
-  width:180px;
-  height:180px;
+  width:210px;
+  height:210px;
   border-radius:50%;
-  border:3px solid #7dd3fc;
-  box-shadow:0 0 40px #38bdf8;
-  transition:0.4s;
+  object-fit:cover;
+  border:4px solid #7dd3fc;
+
+  box-shadow:
+    0 0 30px #38bdf8,
+    0 0 90px rgba(56,189,248,0.45);
+
+  animation:pulse 3s infinite ease-in-out;
 }
 
-.pfp:hover{
-  transform:scale(1.07) rotate(2deg);
-  box-shadow:0 0 80px #38bdf8;
-}
-
+/* NAME */
 .name{
-  font-family:Orbitron;
-  font-size:72px;
+  font-family:Orbitron, sans-serif;
+  font-size:80px;
+  font-weight:900;
+  letter-spacing:6px;
   color:#7dd3fc;
-  letter-spacing:3px;
-  animation:glowPulse 3s infinite alternate;
+
+  text-shadow:
+    0 0 10px #38bdf8,
+    0 0 35px #38bdf8,
+    0 0 80px rgba(56,189,248,0.6);
 }
 
-@keyframes glowPulse{
-  from{ text-shadow:0 0 15px #38bdf8; }
-  to{ text-shadow:0 0 40px #0ea5e9; }
-}
-
-.tag{
-  opacity:0.7;
-  font-size:14px;
-}
-
-/* COUNTER */
-.counter{
-  font-size:18px;
-  color:#38bdf8;
-  background:rgba(255,255,255,0.05);
-  padding:12px 22px;
-  border-radius:14px;
-  backdrop-filter:blur(15px);
-  border:1px solid rgba(255,255,255,0.1);
-  animation:counterGlow 2s infinite alternate;
-}
-
-@keyframes counterGlow{
-  from{ box-shadow:0 0 10px rgba(56,189,248,0.2); }
-  to{ box-shadow:0 0 30px rgba(56,189,248,0.6); }
-}
-
-/* SECTION */
-.section{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:40px;
-}
-
-/* WORDLE CARD */
-.wordle{
-  background:rgba(255,255,255,0.04);
-  padding:35px;
-  border-radius:24px;
-  backdrop-filter:blur(25px);
-  box-shadow:0 0 60px rgba(0,0,0,0.6);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:15px;
-}
-
-/* BOARD */
-.board{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.row{
-  display:flex;
-  gap:8px;
-}
-
-.tile{
-  width:60px;
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:14px;
-  background:rgba(255,255,255,0.07);
-  font-weight:bold;
-  font-size:22px;
-  transition:0.2s;
-}
-
-.tile:hover{
-  transform:scale(1.06);
-}
-
-/* COLORS */
-.green{background:#22c55e; animation:pop 0.2s;}
-.yellow{background:#eab308;}
-.gray{background:#555;}
-
-@keyframes pop{
-  50%{transform:scale(1.2);}
-}
-
-/* KEYBOARD */
-.keyboard{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-.krow{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-}
-
-.key{
-  padding:12px;
-  min-width:34px;
-  border-radius:8px;
-  border:none;
-  background:#111;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  position:relative;
+/* SPOTIFY */
+.spotify{
+  width:650px;
+  border-radius:18px;
   overflow:hidden;
-  transition:0.2s;
+
+  box-shadow:
+    0 0 40px rgba(56,189,248,0.25),
+    0 0 90px rgba(56,189,248,0.15);
 }
 
-.key:hover{
-  background:#1f2937;
-  transform:translateY(-2px);
-}
-
-/* ripple */
-.ripple{
-  position:absolute;
-  width:80px;
-  height:80px;
-  background:rgba(125,211,252,0.5);
-  border-radius:50%;
-  transform:scale(0);
-  animation:ripple 0.5s linear;
-}
-
-@keyframes ripple{
-  to{
-    transform:scale(3);
-    opacity:0;
+/* ANIMATION */
+@keyframes pulse{
+  0%,100%{
+    transform:scale(1);
+    box-shadow:
+      0 0 30px #38bdf8,
+      0 0 80px rgba(56,189,248,0.35);
+  }
+  50%{
+    transform:scale(1.04);
+    box-shadow:
+      0 0 50px #38bdf8,
+      0 0 120px rgba(56,189,248,0.55);
   }
 }
-
-.goodKey{background:#22c55e !important;}
-.presentKey{background:#eab308 !important;}
-
-/* MOBILE */
-@media(max-width:600px){
-  .name{font-size:42px;}
-  .tile{width:45px;height:45px;}
-}
-
 </style>
 </head>
 
@@ -242,229 +127,34 @@ body{
 
 <div class="bg"></div>
 <div class="overlay"></div>
-<div class="mouseGlow" id="mouseGlow"></div>
+<div class="cursor" id="cursor"></div>
 
-<div class="hero">
+<div class="wrap">
+
   <img src="pp.png" class="pfp">
-  <div class="name">Quunix</div>
-  <div class="tag">just gf 💙</div>
-  <div class="counter" id="counter"></div>
-</div>
 
-<div class="section">
-  <div class="wordle">
-    <div>Mini Game 🎮</div>
-    <div class="board" id="board"></div>
-    <div class="keyboard" id="keyboard"></div>
+  <div class="name">Quunix</div>
+
+  <div class="spotify">
+    <iframe 
+      style="border-radius:12px"
+      src="https://open.spotify.com/embed/playlist/55AzvgCu5D4WubbdPx1VOa?utm_source=generator&theme=0"
+      width="100%" height="352"
+      frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
   </div>
+
 </div>
 
 <script>
+const cursor=document.getElementById("cursor");
 
-/* MOUSE GLOW */
-const glow=document.getElementById("mouseGlow");
 document.addEventListener("mousemove",(e)=>{
-  glow.style.left=e.clientX+"px";
-  glow.style.top=e.clientY+"px";
+  cursor.style.left=e.clientX+"px";
+  cursor.style.top=e.clientY+"px";
 });
-
-/* COUNTER */
-const startDate = new Date("2026-04-15T19:24:00");
-
-function updateCounter(){
-  const now=new Date();
-  let diff=now-startDate;
-
-  let s=Math.floor(diff/1000);
-  let d=Math.floor(s/86400);
-  s%=86400;
-  let h=Math.floor(s/3600);
-  s%=3600;
-  let m=Math.floor(s/60);
-  s%=60;
-
-  document.getElementById("counter").innerText=
-  d+" gün "+h+" saat "+m+" dk "+s+" sn";
-}
-setInterval(updateCounter,1000);
-updateCounter();
-
-/* WORDLE (DOKUNULMADI) */
-const WORD="OYKU";
-const ROWS=6;
-const COLS=4;
-
-let row=0,col=0,locked=false;
-let board=Array.from({length:ROWS},()=>Array(COLS).fill(""));
-
-const boardEl=document.getElementById("board");
-const keyboardEl=document.getElementById("keyboard");
-
-function initBoard(){
-  for(let r=0;r<ROWS;r++){
-    let rowEl=document.createElement("div");
-    rowEl.className="row";
-
-    for(let c=0;c<COLS;c++){
-      let t=document.createElement("div");
-      t.className="tile";
-      t.id=`cell-${r}-${c}`;
-      rowEl.appendChild(t);
-    }
-
-    boardEl.appendChild(rowEl);
-  }
-}
-
-const layout=[
-["Q","W","E","R","T","Y","U","I","O","P"],
-["A","S","D","F","G","H","J","K","L"],
-["Z","X","C","V","B","N","M"]
-];
-
-function initKeyboard(){
-  layout.forEach(row=>{
-    let r=document.createElement("div");
-    r.className="krow";
-
-    row.forEach(k=>{
-      let b=document.createElement("button");
-      b.className="key";
-      b.innerText=k;
-
-      b.onclick=(e)=>{
-        ripple(e,b);
-        press(k);
-      };
-
-      r.appendChild(b);
-    });
-
-    keyboardEl.appendChild(r);
-  });
-
-  let last=document.createElement("div");
-  last.className="krow";
-
-  let enter=document.createElement("button");
-  enter.className="key";
-  enter.innerText="ENTER";
-  enter.onclick=check;
-
-  let del=document.createElement("button");
-  del.className="key";
-  del.innerText="⌫";
-  del.onclick=back;
-
-  last.appendChild(enter);
-  last.appendChild(del);
-
-  keyboardEl.appendChild(last);
-}
-
-function ripple(e,btn){
-  let s=document.createElement("span");
-  s.className="ripple";
-
-  let rect=btn.getBoundingClientRect();
-  s.style.left=(e.clientX-rect.left)+"px";
-  s.style.top=(e.clientY-rect.top)+"px";
-
-  btn.appendChild(s);
-  setTimeout(()=>s.remove(),500);
-}
-
-document.addEventListener("keydown",(e)=>{
-  if(locked) return;
-
-  let k=e.key.toUpperCase();
-
-  if(k==="ENTER") check();
-  else if(k==="BACKSPACE") back();
-  else if(/^[A-ZÇŞİĞÜÖ]$/.test(k)) press(k);
-});
-
-function press(k){
-  if(locked) return;
-  if(col<COLS){
-    board[row][col]=k;
-    document.getElementById(`cell-${row}-${col}`).innerText=k;
-    col++;
-  }
-}
-
-function back(){
-  if(locked) return;
-  if(col>0){
-    col--;
-    board[row][col]="";
-    document.getElementById(`cell-${row}-${col}`).innerText="";
-  }
-}
-
-function markKey(letter,type){
-  document.querySelectorAll(".key").forEach(k=>{
-    if(k.innerText===letter){
-      if(type==="green") k.classList.add("goodKey");
-      if(type==="yellow") k.classList.add("presentKey");
-    }
-  });
-}
-
-function check(){
-  if(col<COLS) return;
-
-  let guess=board[row].join("");
-  let used=Array(COLS).fill(false);
-
-  let cells=[];
-
-  for(let i=0;i<COLS;i++){
-    let c=document.getElementById(`cell-${row}-${i}`);
-    cells.push(c);
-
-    if(guess[i]===WORD[i]){
-      c.classList.add("green");
-      used[i]=true;
-      markKey(guess[i],"green");
-    }
-  }
-
-  for(let i=0;i<COLS;i++){
-    let c=cells[i];
-    if(c.classList.contains("green")) continue;
-
-    let found=false;
-
-    for(let j=0;j<COLS;j++){
-      if(!used[j] && guess[i]===WORD[j]){
-        found=true;
-        used[j]=true;
-        break;
-      }
-    }
-
-    if(found){
-      c.classList.add("yellow");
-      markKey(guess[i],"yellow");
-    }
-    else{
-      c.classList.add("gray");
-    }
-  }
-
-  if(guess===WORD){
-    locked=true;
-    setTimeout(()=>alert("Kazandın 💙"),200);
-  }
-
-  row++;
-  col=0;
-}
-
-initBoard();
-initKeyboard();
-
 </script>
 
 </body>
