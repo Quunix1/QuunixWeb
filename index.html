@@ -186,12 +186,54 @@
             font-size: 2.2rem;
             font-family: 'Fredoka', sans-serif;
         }
+
+        /* Gizli S Harfi Tasarımı */
+        .secret-trigger {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.02); /* Çok yüksek saydamlık, neredeyse görünmez */
+            cursor: pointer;
+            z-index: 10;
+            font-family: 'Fredoka', sans-serif;
+            transition: color 0.3s ease;
+        }
+        
+        /* Meraklısı yakından bakıp fareyle üzerine gelirse hafifçe belli olur */
+        .secret-trigger:hover {
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Gizli GIF Alanı */
+        #secret-gif-container {
+            display: none;
+            position: absolute;
+            bottom: 45px;
+            left: 15px;
+            width: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 9;
+            background: #0c111d;
+            animation: fadeIn 0.4s ease-out;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="particles" id="particles"></div>
+
+    <!-- Sol Alt Köşedeki Gizli S Harfi -->
+    <div class="secret-trigger" onclick="toggleSecretGif()">S</div>
+
+    <!-- Tetiklenince Açılacak GIF Alanı -->
+    <div id="secret-gif-container">
+        <div class="tenor-gif-embed" data-postid="13225689541720267052" data-share-method="host" data-aspect-ratio="1.76596" data-width="100%"><a href="https://tenor.com/view/kissxsis-kiss-anime-frenchkiss-tongue-gif-13225689541720267052">Kissxsis Anime GIF</a>from <a href="https://tenor.com/search/kissxsis-gifs">Kissxsis GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    </div>
 
     <div class="container">
         <!-- Devasa Başlık -->
@@ -294,7 +336,6 @@
         ];
 
         // Sonrasında tamamen karışık çıkacak olan havuz
-        // "Sevmiyorsa bende sevmem." cümlesi ardışık tetikleneceği için ana havuzdan çıkarıldı.
         const homeParadoxPool = [
             "Artık bir evim yok",
             "Hayır, eve gidemezsin. Çünkü gitmek istediğin ev artık yok.",
@@ -314,7 +355,7 @@
         ];
 
         let clickCount = 0;
-        let chainReactionActive = false; // Zincirleme tetiklemeyi izleyen durum bayrağı
+        let chainReactionActive = false; 
         const msgDiv = document.getElementById("secret-message");
 
         function triggerHomeAction() {
@@ -328,7 +369,7 @@
             // Eğer bir önceki tıklamada balık cümlesi çıktıysa, araya hiç rastgele sokmadan bunu çalıştır
             else if (chainReactionActive) {
                 selectedLine = "Sevmiyorsa bende sevmem.";
-                chainReactionActive = false; // Zinciri sıfırla
+                chainReactionActive = false; 
             }
             // Tüm havuz bittiyse verilecek net son karar
             else if (homeParadoxPool.length === 0) {
@@ -344,7 +385,6 @@
                 const randomIndex = Math.floor(Math.random() * homeParadoxPool.length);
                 selectedLine = homeParadoxPool.splice(randomIndex, 1)[0];
 
-                // Eğer şans eseri balık cümlesi çekildiyse, bir sonraki tıklama için zinciri aktif et
                 if (selectedLine === "Zaten balık sevmiyordu, boş ver.") {
                     chainReactionActive = true;
                 }
@@ -356,6 +396,16 @@
                 msgDiv.textContent = selectedLine;
                 msgDiv.style.opacity = 1;
             }, 150);
+        }
+
+        // Gizli GIF'i açıp kapatan fonksiyon
+        function toggleSecretGif() {
+            const gifContainer = document.getElementById("secret-gif-container");
+            if (gifContainer.style.display === "none" || gifContainer.style.display === "") {
+                gifContainer.style.display = "block";
+            } else {
+                gifContainer.style.display = "none";
+            }
         }
     </script>
 
