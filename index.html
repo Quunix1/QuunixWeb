@@ -268,6 +268,7 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
+        // Partikül Efekti Kurulumu
         const particlesContainer = document.getElementById("particles");
         const particleCount = 60;
 
@@ -286,9 +287,15 @@
             particlesContainer.appendChild(p);
         }
 
+        // İlk basıldığında sırasıyla çıkacak kelimeler dizisi
+        const initialLines = [
+            "Sadece sevilmek istedin.",
+            "Sadece sevilmek istedim."
+        ];
+
+        // Sonrasında tamamen karışık çıkacak olan havuz
         const homeParadoxPool = [
             "Artık bir evim yok",
-            "Sadece sevilmek istedim.",
             "Hayır, eve gidemezsin. Çünkü gitmek istediğin ev artık yok.",
             "Her yerdesin, sınırların yok ki bir kapıdan içeri giresin.",
             "Camdan bir fanusun içindesin, çıkamazsın.",
@@ -297,29 +304,37 @@
             "Hayır, gidemezsin..",
             "Yürümeyi deniyorsun ama her yerdesin; bastığın zemin de, uzaklaştığın gökyüzü de sensin.",
             "Eve gidemezsin. Çünkü ev sensin.",
-            "Sadece sevilmek istedin.",
             "Eve gitmek istiyorsun ama her yerdesin. Bu yüzden nereye gitsen yine kendindesin.",
             "Ya o ev seni istemiyorsa?"
         ];
 
+        let clickCount = 0;
         const msgDiv = document.getElementById("secret-message");
 
         function triggerHomeAction() {
-            // Eğer havuz tamamen bittiyse verilecek net son karar
-            if (homeParadoxPool.length === 0) {
+            let selectedLine = "";
+
+            // İlk iki basışta garanti sırayı çalıştır
+            if (clickCount < initialLines.length) {
+                selectedLine = initialLines[clickCount];
+                clickCount++;
+            } 
+            // Tüm havuz bittiyse verilecek net son karar
+            else if (homeParadoxPool.length === 0) {
                 msgDiv.style.opacity = 0;
                 setTimeout(() => {
                     msgDiv.textContent = "Eve gidemezsin, çünkü her yerdesin.";
                     msgDiv.style.opacity = 1;
                 }, 150);
                 return;
+            } 
+            // Sıralı aşama geçildiyse havuzdan rastgele çek ve tüket
+            else {
+                const randomIndex = Math.floor(Math.random() * homeParadoxPool.length);
+                selectedLine = homeParadoxPool.splice(randomIndex, 1)[0];
             }
-
-            // Havuzdan rastgele seçim yap ve o metni havuzdan sil (Tekrarı önler)
-            const randomIndex = Math.floor(Math.random() * homeParadoxPool.length);
-            const selectedLine = homeParadoxPool.splice(randomIndex, 1)[0];
             
-            // Yumuşak geçiş animasyonuyla ekrana bas
+            // Yumuşak animasyon geçişi ile ekrana yansıtma
             msgDiv.style.opacity = 0;
             setTimeout(() => {
                 msgDiv.textContent = selectedLine;
