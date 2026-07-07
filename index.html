@@ -193,32 +193,44 @@
             bottom: 15px;
             left: 15px;
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.02); /* Çok yüksek saydamlık, neredeyse görünmez */
+            color: rgba(255, 255, 255, 0.02); /* Çok yüksek saydamlık, neredeyse tamamen görünmez */
             cursor: pointer;
             z-index: 10;
             font-family: 'Fredoka', sans-serif;
             transition: color 0.3s ease;
         }
         
-        /* Meraklısı yakından bakıp fareyle üzerine gelirse hafifçe belli olur */
+        /* Fareyle tam üzerine gelirse hafifçe belli olur */
         .secret-trigger:hover {
             color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Gizli GIF Alanı */
+        /* Saf ve Gizli GIF Alanı */
         #secret-gif-container {
             display: none;
             position: absolute;
-            bottom: 45px;
+            bottom: 40px;
             left: 15px;
-            width: 250px;
-            border-radius: 12px;
+            width: 260px;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 94, 98, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             z-index: 9;
             background: #0c111d;
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeInGif 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        #secret-gif-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none; /* Üzerine sağ tıklanmasını veya sürüklenmesini zorlaştırır, daha entegre durur */
+        }
+
+        @keyframes fadeInGif {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
     </style>
 </head>
@@ -230,9 +242,9 @@
     <!-- Sol Alt Köşedeki Gizli S Harfi -->
     <div class="secret-trigger" onclick="toggleSecretGif()">S</div>
 
-    <!-- Tetiklenince Açılacak GIF Alanı -->
+    <!-- Tetiklenince Açılacak Saf GIF Alanı (Dış scriptler olmadan temiz görüntü) -->
     <div id="secret-gif-container">
-        <div class="tenor-gif-embed" data-postid="13225689541720267052" data-share-method="host" data-aspect-ratio="1.76596" data-width="100%"><a href="https://tenor.com/view/kissxsis-kiss-anime-frenchkiss-tongue-gif-13225689541720267052">Kissxsis Anime GIF</a>from <a href="https://tenor.com/search/kissxsis-gifs">Kissxsis GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        <img src="https://media.tenor.com/E6bK4bO_g38AAAAC/kissxsis-kiss.gif" alt="Secret Frame">
     </div>
 
     <div class="container">
@@ -361,17 +373,14 @@
         function triggerHomeAction() {
             let selectedLine = "";
 
-            // İlk iki basışta garanti sırayı çalıştır
             if (clickCount < initialLines.length) {
                 selectedLine = initialLines[clickCount];
                 clickCount++;
             } 
-            // Eğer bir önceki tıklamada balık cümlesi çıktıysa, araya hiç rastgele sokmadan bunu çalıştır
             else if (chainReactionActive) {
                 selectedLine = "Sevmiyorsa bende sevmem.";
                 chainReactionActive = false; 
             }
-            // Tüm havuz bittiyse verilecek net son karar
             else if (homeParadoxPool.length === 0) {
                 msgDiv.style.opacity = 0;
                 setTimeout(() => {
@@ -380,7 +389,6 @@
                 }, 150);
                 return;
             } 
-            // Sıralı aşama geçildiyse havuzdan rastgele çek ve tüket
             else {
                 const randomIndex = Math.floor(Math.random() * homeParadoxPool.length);
                 selectedLine = homeParadoxPool.splice(randomIndex, 1)[0];
@@ -390,7 +398,6 @@
                 }
             }
             
-            // Yumuşak animasyon geçişi ile ekrana yansıtma
             msgDiv.style.opacity = 0;
             setTimeout(() => {
                 msgDiv.textContent = selectedLine;
@@ -398,7 +405,7 @@
             }, 150);
         }
 
-        // Gizli GIF'i açıp kapatan fonksiyon
+        // Gizli GIF'i temiz bir şekilde açıp kapatan fonksiyon
         function toggleSecretGif() {
             const gifContainer = document.getElementById("secret-gif-container");
             if (gifContainer.style.display === "none" || gifContainer.style.display === "") {
