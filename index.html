@@ -294,6 +294,7 @@
         ];
 
         // Sonrasında tamamen karışık çıkacak olan havuz
+        // "Sevmiyorsa bende sevmem." cümlesi ardışık tetikleneceği için ana havuzdan çıkarıldı.
         const homeParadoxPool = [
             "Artık bir evim yok",
             "Hayır, eve gidemezsin. Çünkü gitmek istediğin ev artık yok.",
@@ -306,7 +307,6 @@
             "Evine gelecek mi?",
             "Ya tekrar yaparsa?",
             "Zaten balık sevmiyordu, boş ver.",
-            "Sevmiyorsa bende sevmem.",
             "Yürümeyi deniyorsun ama her yerdesin; bastığın zemin de, uzaklaştığın gökyüzü de sensin.",
             "Eve gidemezsin. Çünkü ev sensin.",
             "Eve gitmek istiyorsun ama her yerdesin. Bu yüzden nereye gitsen yine kendindesin.",
@@ -314,6 +314,7 @@
         ];
 
         let clickCount = 0;
+        let chainReactionActive = false; // Zincirleme tetiklemeyi izleyen durum bayrağı
         const msgDiv = document.getElementById("secret-message");
 
         function triggerHomeAction() {
@@ -324,6 +325,11 @@
                 selectedLine = initialLines[clickCount];
                 clickCount++;
             } 
+            // Eğer bir önceki tıklamada balık cümlesi çıktıysa, araya hiç rastgele sokmadan bunu çalıştır
+            else if (chainReactionActive) {
+                selectedLine = "Sevmiyorsa bende sevmem.";
+                chainReactionActive = false; // Zinciri sıfırla
+            }
             // Tüm havuz bittiyse verilecek net son karar
             else if (homeParadoxPool.length === 0) {
                 msgDiv.style.opacity = 0;
@@ -337,6 +343,11 @@
             else {
                 const randomIndex = Math.floor(Math.random() * homeParadoxPool.length);
                 selectedLine = homeParadoxPool.splice(randomIndex, 1)[0];
+
+                // Eğer şans eseri balık cümlesi çekildiyse, bir sonraki tıklama için zinciri aktif et
+                if (selectedLine === "Zaten balık sevmiyordu, boş ver.") {
+                    chainReactionActive = true;
+                }
             }
             
             // Yumuşak animasyon geçişi ile ekrana yansıtma
