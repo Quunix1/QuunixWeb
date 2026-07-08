@@ -1,1 +1,313 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sude'm İçin ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+            overflow: hidden;
+            position: relative;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23ff4d6d'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"), auto;
+        }
+
+        .bg-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 77, 109, 0.25);
+            animation: floatUp 6s linear infinite;
+            bottom: -50px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+
+        .click-heart {
+            position: absolute;
+            color: #ff4d6d;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 24px;
+            animation: popHeart 0.8s ease-out forwards;
+        }
+
+        @keyframes popHeart {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(1.5); opacity: 0; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 3.5rem 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            z-index: 10;
+            border: 2px solid rgba(255, 179, 193, 0.5);
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.6rem;
+            margin-bottom: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background-color 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            min-width: 130px;
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, #ff4d6d, #ff758f);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        .no-btn {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #e9ecef;
+        }
+
+        .no-btn.runaway {
+            position: fixed;
+            z-index: 999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1), top 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-out-up {
+            animation: fadeOutUp 0.4s ease forwards;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fadeOutUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .success-content img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            margin-top: 1rem;
+        }
+
+        .success-content h2 {
+            color: #ff2a54;
+            font-size: 2.4rem;
+            margin-top: 1.5rem;
+            animation: pulse 1.5s infinite;
+            font-weight: 800;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="bgHearts"></div>
+
+    <div class="card" id="mainCard">
+        <div id="step1">
+            <h1>Beni seviyor musun? 🥺</h1>
+            <div class="btn-container">
+                <button class="btn yes-btn" id="yes1">Evet</button>
+                <button class="btn no-btn" id="no1">Hayır</button>
+            </div>
+        </div>
+
+        <div id="step2" class="hidden">
+            <h1>Benimle çıkar mısın Sude'm? ❤️</h1>
+            <div class="btn-container">
+                <button class="btn yes-btn" id="yes2">Evet</button>
+                <button class="btn no-btn" id="no2">Hayır</button>
+            </div>
+        </div>
+
+        <div id="successArea" class="hidden success-content">
+            <img src="https://media1.tenor.com/m/t4sWkMPV2SwAAAAd/kissxsis-kiss.gif" alt="Aşk">
+            <h2>Damat öpmeni bekliyor.</h2>
+        </div>
+    </div>
+
+    <script>
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const successArea = document.getElementById('successArea');
+        
+        const yes1 = document.getElementById('yes1');
+        const no1 = document.getElementById('no1');
+        const yes2 = document.getElementById('yes2');
+        const no2 = document.getElementById('no2');
+        
+        const bgHeartsContainer = document.getElementById('bgHearts');
+
+        function createBgHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            bgHeartsContainer.appendChild(heart);
+
+            setTimeout(() => { heart.remove(); }, 7000);
+        }
+        setInterval(createBgHeart, 300);
+
+        document.addEventListener('click', (e) => {
+            for(let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('click-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = e.pageX + 'px';
+                heart.style.top = e.pageY + 'px';
+                
+                const mx = (Math.random() - 0.5) * 200 + 'px';
+                const my = (Math.random() - 0.5) * 200 - 100 + 'px';
+                heart.style.setProperty('--mx', mx);
+                heart.style.setProperty('--my', my);
+                
+                document.body.appendChild(heart);
+                setTimeout(() => { heart.remove(); }, 800);
+            }
+        });
+
+        let no1Clicks = 0;
+        no1.addEventListener('click', (e) => {
+            no1Clicks++;
+            if(no1Clicks === 1) {
+                no1.innerText = "Emin misin üzülürüm bak 💔";
+                yes1.style.transform = "scale(1.2)";
+            } else if(no1Clicks === 2) {
+                no1.innerText = "Bir daha düşünsen? 🥺";
+                yes1.style.transform = "scale(1.4)";
+            } else {
+                no1.innerText = "Seviyorsun be yalan söyleme.";
+                yes1.style.transform = "scale(1.6)";
+            }
+        });
+
+        yes1.addEventListener('click', () => {
+            step1.classList.add('fade-out-up');
+            setTimeout(() => {
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                step2.classList.add('fade-in-up');
+            }, 350);
+        });
+
+        function moveNoButton() {
+            no2.classList.add('runaway');
+            
+            const padding = 35;
+            const btnWidth = no2.offsetWidth;
+            const btnHeight = no2.offsetHeight;
+            
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            no2.style.left = randomX + 'px';
+            no2.style.top = randomY + 'px';
+        }
+
+        no2.addEventListener('mouseenter', moveNoButton);
+        no2.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        yes2.addEventListener('click', () => {
+            step2.classList.add('fade-out-up');
+            setTimeout(() => {
+                step2.classList.add('hidden');
+                successArea.classList.remove('hidden');
+                successArea.classList.add('scale-in');
+                
+                for(let i = 0; i < 40; i++) {
+                    setTimeout(createBgHeart, i * 80);
+                }
+            }, 350);
+        });
+    </script>
+</body>
+</html>
