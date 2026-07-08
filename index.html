@@ -352,21 +352,18 @@
 
         // Sonrasında tamamen karışık çıkacak olan havuz
         const homeParadoxPool = [
-            "Artık bir evim yok",
-            "Hayır, eve gidemezsin. Çünkü gitmek istediğin ev artık yok.",
-            "Her yerdesin, sınırların yok ki bir kapıdan içeri giresin.",
-            "Camdan bir fanusun içindesin, çıkamazsın.",
-            "Geri dönemezsin.",
-            "Evin seni terk etti.",
-            "Hayır, gidemezsin..",
-            "O seni unutacak, ya sen?",
-            "Evine gelecek mi?",
+            "Sen zaten evindesin.",
+            "Evin seni buldu.",
+            "Her yerdesin, en çokta sude'nin yanında.",
+            "Camdan bir fanusun içindesin, ama yanında sude'de var.",
+            "Geri döndün zaten.",
+            "Evin seni istiyor.",
+            "Evin seni özledi.",
+            "Evine gelecek.",
             "Ya tekrar yaparsa?",
-            "Zaten balık sevmiyordu, boş ver.",
-            "Yürümeyi deniyorsun ama her yerdesin; bastığın zemin de, uzaklaştığın gökyüzü de sensin.",
+            "Zaten balık sevmiyordu.",
             "Eve gidemezsin. Çünkü ev sensin.",
-            "Eve gitmek istiyorsun ama her yerdesin. Bu yüzden nereye gitsen yine kendindesin.",
-            "Ya o ev seni istemiyorsa?"
+            "Eve gitmek istiyorsun ama her yerdesin. En çokta sude'nin yanında"
         ];
 
         let clickCount = 0;
@@ -381,13 +378,13 @@
                 clickCount++;
             } 
             else if (chainReactionActive) {
-                selectedLine = "Sevmiyorsa bende sevmem.";
+                selectedLine = "Neyse ki onun sevmediklerini sevmiyorsun.";
                 chainReactionActive = false; 
             }
             else if (homeParadoxPool.length === 0) {
                 msgDiv.style.opacity = 0;
                 setTimeout(() => {
-                    msgDiv.textContent = "Eve gidemezsin, çünkü her yerdesin.";
+                    msgDiv.textContent = "Zaten evdesin.";
                     msgDiv.style.opacity = 1;
                 }, 150);
                 return;
@@ -396,7 +393,7 @@
                 const randomIndex = Math.floor(Math.random() * homeParadoxPool.length);
                 selectedLine = homeParadoxPool.splice(randomIndex, 1)[0];
 
-                if (selectedLine === "Zaten balık sevmiyordu, boş ver.") {
+                if (selectedLine === "Zaten balık sevmiyordu.") {
                     chainReactionActive = true;
                 }
             }
