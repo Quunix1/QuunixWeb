@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -7,481 +6,728 @@
 <title>quunix</title>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background:
+        radial-gradient(circle at 50% 45%,
+            #ffffff 0%,
+            #f5fcff 28%,
+            #e5f7ff 60%,
+            #c9edff 100%);
+
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: none;
+}
+
+/* --------------------------------
+   ARKA PLAN IŞIĞI
+-------------------------------- */
+
+.background-glow {
+    position: fixed;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(91, 207, 255, .28) 0%,
+            rgba(120, 220, 255, .13) 35%,
+            transparent 70%
+        );
+
+    filter: blur(30px);
+    pointer-events: none;
+
+    animation: breathing 6s ease-in-out infinite;
+}
+
+@keyframes breathing {
+    0%,100% {
+        transform: scale(.85);
+        opacity: .65;
     }
 
-    html, body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #030305;
-        font-family: Arial, Helvetica, sans-serif;
-        cursor: none;
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
     }
+}
+
+/* --------------------------------
+   YUMUŞAK HALO
+-------------------------------- */
+
+.halo {
+    position: fixed;
+    width: 850px;
+    height: 850px;
+
+    border: 1px solid rgba(100, 205, 255, .12);
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 80px rgba(80, 200, 255, .08),
+        inset 0 0 80px rgba(80, 200, 255, .05);
+
+    animation: rotateHalo 30s linear infinite;
+    pointer-events: none;
+}
+
+.halo::before {
+    content: "";
+    position: absolute;
+    inset: 80px;
+
+    border: 1px dashed rgba(95, 205, 255, .13);
+    border-radius: 50%;
+}
+
+@keyframes rotateHalo {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --------------------------------
+   GRID
+-------------------------------- */
+
+.grid {
+    position: fixed;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(72, 190, 240, .035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(72, 190, 240, .035) 1px,
+            transparent 1px
+        );
+
+    background-size: 55px 55px;
+
+    mask-image: radial-gradient(
+        circle at center,
+        black,
+        transparent 75%
+    );
+
+    pointer-events: none;
+}
+
+/* --------------------------------
+   QUUNIX
+-------------------------------- */
+
+.logo {
+    position: relative;
+    z-index: 20;
+
+    font-size: clamp(80px, 16vw, 250px);
+
+    font-weight: 900;
+
+    letter-spacing: -0.08em;
+
+    line-height: .8;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 2px 0 #d5f5ff,
+        0 5px 12px rgba(49, 178, 235, .25),
+        0 0 15px rgba(77, 207, 255, .8),
+        0 0 40px rgba(73, 196, 255, .65),
+        0 0 90px rgba(77, 195, 255, .35);
+
+    user-select: none;
+
+    transition:
+        transform .25s cubic-bezier(.2,.8,.2,1),
+        text-shadow .3s ease;
+}
+
+/* MAVİ İÇ PARLAMA */
+
+.logo::before {
+    content: "quunix";
+
+    position: absolute;
+    inset: 0;
+
+    color: transparent;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 5%,
+            #ffffff 25%,
+            #b9efff 55%,
+            #72d9ff 100%
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    opacity: .65;
+
+    z-index: -1;
+}
+
+/* PARLAKLIK GEÇİŞİ */
+
+.logo::after {
+    content: "quunix";
+
+    position: absolute;
+    inset: 0;
+
+    color: transparent;
+
+    background:
+        linear-gradient(
+            115deg,
+            transparent 30%,
+            rgba(255,255,255,.9) 45%,
+            #ffffff 50%,
+            transparent 65%
+        );
+
+    background-size: 250% 100%;
+    background-position: 200% 0;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    animation: shine 5s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0%, 60% {
+        background-position: 200% 0;
+    }
+
+    80%, 100% {
+        background-position: -100% 0;
+    }
+}
+
+/* --------------------------------
+   KALPLER / YILDIZLAR
+-------------------------------- */
+
+.decorations {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.star,
+.heart,
+.sparkle {
+    position: absolute;
+
+    color: rgba(255,255,255,.9);
+
+    text-shadow:
+        0 0 7px rgba(76,201,255,.9),
+        0 0 18px rgba(76,201,255,.55);
+
+    animation:
+        floatAround var(--duration) ease-in-out infinite,
+        twinkle 2s ease-in-out infinite;
+}
+
+.star {
+    font-size: var(--size);
+}
+
+.heart {
+    color: #9de7ff;
+    font-size: var(--size);
+}
+
+.sparkle {
+    color: white;
+    font-size: var(--size);
+}
+
+@keyframes floatAround {
+    0%,100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(8deg);
+    }
+}
+
+@keyframes twinkle {
+    0%,100% {
+        opacity: .35;
+        filter: brightness(.8);
+    }
+
+    50% {
+        opacity: 1;
+        filter: brightness(1.5);
+    }
+}
+
+/* --------------------------------
+   BALONCUKLAR
+-------------------------------- */
+
+.bubble {
+    position: fixed;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.8);
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            rgba(255,255,255,.9),
+            rgba(170,235,255,.25) 40%,
+            transparent 70%
+        );
+
+    box-shadow:
+        inset 0 0 10px rgba(255,255,255,.7),
+        0 0 15px rgba(82,200,255,.18);
+
+    animation: bubbleFloat var(--duration) linear infinite;
+}
+
+@keyframes bubbleFloat {
+    from {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: .8;
+    }
+
+    85% {
+        opacity: .8;
+    }
+
+    to {
+        transform: translateY(-20vh) translateX(var(--move));
+        opacity: 0;
+    }
+}
+
+/* --------------------------------
+   MOUSE IŞIĞI
+-------------------------------- */
+
+.mouse-light {
+    position: fixed;
+
+    width: 420px;
+    height: 420px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(69,205,255,.22) 0%,
+            rgba(88,213,255,.12) 25%,
+            rgba(100,220,255,.04) 50%,
+            transparent 72%
+        );
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    z-index: 3;
+
+    filter: blur(4px);
+}
+
+.cursor {
+    position: fixed;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 7px white,
+        0 0 15px #56d4ff,
+        0 0 30px #56d4ff,
+        0 0 55px #56d4ff;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    z-index: 100;
+}
+
+/* --------------------------------
+   MOUSE TRAIL
+-------------------------------- */
+
+.trail {
+    position: fixed;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 7px #fff,
+        0 0 15px #69d8ff,
+        0 0 28px #69d8ff;
+
+    pointer-events: none;
+
+    z-index: 10;
+
+    transform: translate(-50%, -50%);
+
+    animation: trail .7s ease-out forwards;
+}
+
+@keyframes trail {
+    from {
+        opacity: .9;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+}
+
+/* --------------------------------
+   KENAR IŞIĞI
+-------------------------------- */
+
+.vignette {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 50;
+
+    box-shadow:
+        inset 0 0 180px rgba(100,210,255,.08),
+        inset 0 0 60px rgba(255,255,255,.25);
+}
+
+/* --------------------------------
+   MOBİL
+-------------------------------- */
+
+@media(max-width:600px) {
 
     body {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        cursor: auto;
     }
 
-    /* ANA ARKA PLAN */
-    body::before {
-        content: "";
-        position: fixed;
-        inset: -50%;
-        background:
-            radial-gradient(
-                circle at var(--mx, 50%) var(--my, 50%),
-                rgba(120, 70, 255, 0.16) 0%,
-                rgba(80, 40, 180, 0.07) 12%,
-                transparent 32%
-            );
-        pointer-events: none;
-        z-index: 0;
-        transition: background 0.15s ease;
-    }
-
-    /* Hafif grid */
-    .grid {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        opacity: 0.16;
-        background-image:
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-        background-size: 60px 60px;
-        mask-image: radial-gradient(circle, black 10%, transparent 80%);
-        -webkit-mask-image: radial-gradient(circle, black 10%, transparent 80%);
-    }
-
-    /* ORTADAKİ IŞIK */
-    .center-glow {
-        position: fixed;
-        width: 500px;
-        height: 500px;
-        border-radius: 50%;
-        background: rgba(110, 55, 255, 0.08);
-        filter: blur(100px);
-        z-index: 0;
-        pointer-events: none;
-        animation: breathe 5s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-        0%, 100% {
-            transform: scale(0.85);
-            opacity: 0.5;
-        }
-        50% {
-            transform: scale(1.15);
-            opacity: 1;
-        }
-    }
-
-    /* PARÇACIKLAR */
-    .particles {
-        position: fixed;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    .particle {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        border-radius: 50%;
-        background: rgba(180, 150, 255, 0.8);
-        box-shadow:
-            0 0 8px rgba(130, 80, 255, 0.8),
-            0 0 18px rgba(100, 50, 255, 0.4);
-        animation: float linear infinite;
-    }
-
-    @keyframes float {
-        from {
-            transform: translateY(110vh) translateX(0);
-            opacity: 0;
-        }
-        10% {
-            opacity: 1;
-        }
-        90% {
-            opacity: 1;
-        }
-        to {
-            transform: translateY(-10vh) translateX(60px);
-            opacity: 0;
-        }
-    }
-
-    /* LOGO */
-    .logo-wrap {
-        position: relative;
-        z-index: 5;
-        text-align: center;
-        user-select: none;
+    .cursor,
+    .mouse-light {
+        display: none;
     }
 
     .logo {
-        position: relative;
-        display: inline-block;
-
-        font-size: clamp(90px, 15vw, 250px);
-        font-weight: 900;
-        letter-spacing: -0.075em;
-        line-height: 0.8;
-
-        color: #f7f4ff;
-
-        text-shadow:
-            0 0 8px rgba(255,255,255,0.7),
-            0 0 25px rgba(150,100,255,0.8),
-            0 0 55px rgba(120,70,255,0.55),
-            0 0 110px rgba(90,40,255,0.35);
-
-        transition:
-            transform 0.25s cubic-bezier(.2,.8,.2,1),
-            text-shadow 0.25s ease;
+        font-size: 24vw;
     }
 
-    /* IŞIKLI YAZI KATMANI */
-    .logo::before {
-        content: "quunix";
-        position: absolute;
-        inset: 0;
-
-        color: transparent;
-        -webkit-text-stroke: 1px rgba(180,140,255,0.7);
-
-        filter: blur(5px);
-        opacity: 0.8;
-
-        z-index: -1;
+    .halo {
+        width: 550px;
+        height: 550px;
     }
-
-    /* PARLAKLIK GEÇİŞİ */
-    .logo::after {
-        content: "quunix";
-        position: absolute;
-        inset: 0;
-
-        color: transparent;
-        background: linear-gradient(
-            110deg,
-            transparent 25%,
-            rgba(255,255,255,0.9) 45%,
-            rgba(190,150,255,1) 50%,
-            transparent 70%
-        );
-
-        background-size: 250% 100%;
-        background-position: 200% 0;
-
-        -webkit-background-clip: text;
-        background-clip: text;
-
-        animation: shine 5s ease-in-out infinite;
-
-        pointer-events: none;
-    }
-
-    @keyframes shine {
-        0%, 65% {
-            background-position: 200% 0;
-        }
-        85%, 100% {
-            background-position: -100% 0;
-        }
-    }
-
-    /* MOUSE */
-    .cursor {
-        position: fixed;
-        left: 0;
-        top: 0;
-
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-
-        background: white;
-
-        box-shadow:
-            0 0 8px white,
-            0 0 20px #9d6cff,
-            0 0 45px #713cff,
-            0 0 80px rgba(110,60,255,0.7);
-
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        z-index: 100;
-    }
-
-    .cursor-glow {
-        position: fixed;
-        left: 0;
-        top: 0;
-
-        width: 260px;
-        height: 260px;
-
-        border-radius: 50%;
-
-        background: radial-gradient(
-            circle,
-            rgba(120,70,255,0.18) 0%,
-            rgba(100,50,255,0.08) 25%,
-            transparent 70%
-        );
-
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        z-index: 2;
-
-        filter: blur(4px);
-    }
-
-    /* MOUSE HARE */
-    .trail {
-        position: fixed;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-
-        background: rgba(160,120,255,0.8);
-
-        box-shadow:
-            0 0 8px rgba(150,100,255,0.9),
-            0 0 20px rgba(100,50,255,0.6);
-
-        pointer-events: none;
-        z-index: 3;
-
-        transform: translate(-50%, -50%);
-        animation: trailFade 0.7s forwards;
-    }
-
-    @keyframes trailFade {
-        0% {
-            opacity: 0.8;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0);
-        }
-    }
-
-    /* EKRAN KENARLARINDA VIGNETTE */
-    .vignette {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 10;
-
-        box-shadow:
-            inset 0 0 180px rgba(0,0,0,0.85),
-            inset 0 0 50px rgba(0,0,0,0.5);
-    }
-
-    /* HAFİF GLITCH */
-    .logo.glitch {
-        animation: glitch 0.2s linear;
-    }
-
-    @keyframes glitch {
-        0% {
-            transform: translate(0);
-        }
-        20% {
-            transform: translate(-3px, 1px);
-        }
-        40% {
-            transform: translate(3px, -1px);
-        }
-        60% {
-            transform: translate(-2px, 0);
-        }
-        80% {
-            transform: translate(2px, 1px);
-        }
-        100% {
-            transform: translate(0);
-        }
-    }
-
-    /* MOBİL */
-    @media (max-width: 600px) {
-        html, body {
-            cursor: auto;
-        }
-
-        .cursor,
-        .cursor-glow {
-            display: none;
-        }
-
-        .logo {
-            font-size: 25vw;
-        }
-
-        .grid {
-            background-size: 35px 35px;
-        }
-    }
+}
 </style>
 </head>
 
 <body>
 
+<div class="background-glow"></div>
+<div class="halo"></div>
 <div class="grid"></div>
-<div class="center-glow"></div>
-<div class="particles"></div>
 
-<div class="logo-wrap">
-    <div class="logo" id="logo">quunix</div>
+<div class="decorations" id="decorations"></div>
+
+<div class="logo" id="logo">
+    quunix
 </div>
 
-<div class="cursor-glow" id="cursorGlow"></div>
+<div class="mouse-light" id="mouseLight"></div>
 <div class="cursor" id="cursor"></div>
 
 <div class="vignette"></div>
 
 <script>
-    /* -------------------------
-       PARÇACIKLAR
-    ------------------------- */
-    const particles = document.querySelector(".particles");
 
-    for (let i = 0; i < 65; i++) {
-        const p = document.createElement("div");
-        p.className = "particle";
+/* =================================
+   DEKORASYONLAR
+================================= */
 
-        p.style.left = Math.random() * 100 + "%";
-        p.style.animationDuration = (8 + Math.random() * 18) + "s";
-        p.style.animationDelay = (-Math.random() * 20) + "s";
+const decorations =
+    document.getElementById("decorations");
 
-        const size = Math.random() * 2.5 + 1;
-        p.style.width = size + "px";
-        p.style.height = size + "px";
+const symbols = [
+    "✦",
+    "✧",
+    "♡",
+    "☆",
+    "⋆",
+    "✦",
+    "♡",
+    "✧"
+];
 
-        particles.appendChild(p);
+for(let i = 0; i < 28; i++) {
+
+    const el = document.createElement("div");
+
+    const symbol =
+        symbols[Math.floor(Math.random() * symbols.length)];
+
+    el.textContent = symbol;
+
+    if(symbol === "♡") {
+        el.className = "heart";
+    }
+    else if(symbol === "☆") {
+        el.className = "star";
+    }
+    else {
+        el.className = "sparkle";
     }
 
-    /* -------------------------
-       MOUSE
-    ------------------------- */
-    const cursor = document.getElementById("cursor");
-    const cursorGlow = document.getElementById("cursorGlow");
-    const logo = document.getElementById("logo");
+    const size =
+        Math.floor(Math.random() * 15) + 10;
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+    el.style.setProperty(
+        "--size",
+        size + "px"
+    );
 
-    let glowX = mouseX;
-    let glowY = mouseY;
+    el.style.left =
+        Math.random() * 100 + "%";
 
-    document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+    el.style.top =
+        Math.random() * 100 + "%";
 
-        cursor.style.left = mouseX + "px";
-        cursor.style.top = mouseY + "px";
+    el.style.setProperty(
+        "--duration",
+        (3 + Math.random() * 5) + "s"
+    );
 
-        document.documentElement.style.setProperty(
-            "--mx",
-            (mouseX / window.innerWidth * 100) + "%"
-        );
+    el.style.animationDelay =
+        (-Math.random() * 5) + "s";
 
-        document.documentElement.style.setProperty(
-            "--my",
-            (mouseY / window.innerHeight * 100) + "%"
-        );
+    decorations.appendChild(el);
+}
 
-        /* Logo hafif mouse'a doğru eğilsin */
-        const x = (mouseX / window.innerWidth - 0.5) * 14;
-        const y = (mouseY / window.innerHeight - 0.5) * 8;
+/* =================================
+   BALONCUKLAR
+================================= */
+
+for(let i = 0; i < 22; i++) {
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className = "bubble";
+
+    const size =
+        Math.random() * 22 + 7;
+
+    bubble.style.width = size + "px";
+    bubble.style.height = size + "px";
+
+    bubble.style.left =
+        Math.random() * 100 + "%";
+
+    bubble.style.animationDelay =
+        (-Math.random() * 15) + "s";
+
+    bubble.style.setProperty(
+        "--duration",
+        (10 + Math.random() * 15) + "s"
+    );
+
+    bubble.style.setProperty(
+        "--move",
+        (Math.random() * 150 - 75) + "px"
+    );
+
+    document.body.appendChild(bubble);
+}
+
+/* =================================
+   MOUSE
+================================= */
+
+const cursor =
+    document.getElementById("cursor");
+
+const mouseLight =
+    document.getElementById("mouseLight");
+
+const logo =
+    document.getElementById("logo");
+
+let mouseX = innerWidth / 2;
+let mouseY = innerHeight / 2;
+
+let lightX = mouseX;
+let lightY = mouseY;
+
+document.addEventListener("mousemove", e => {
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    cursor.style.left =
+        mouseX + "px";
+
+    cursor.style.top =
+        mouseY + "px";
+
+    /* Logo mouse'a doğru hafif eğilsin */
+
+    const rotateX =
+        ((mouseY / innerHeight) - .5) * -8;
+
+    const rotateY =
+        ((mouseX / innerWidth) - .5) * 12;
+
+    logo.style.transform =
+        `perspective(1000px)
+         rotateX(${rotateX}deg)
+         rotateY(${rotateY}deg)
+         scale(1.015)`;
+});
+
+/* Işığı yumuşak şekilde takip ettir */
+
+function animateLight() {
+
+    lightX +=
+        (mouseX - lightX) * .08;
+
+    lightY +=
+        (mouseY - lightY) * .08;
+
+    mouseLight.style.left =
+        lightX + "px";
+
+    mouseLight.style.top =
+        lightY + "px";
+
+    requestAnimationFrame(animateLight);
+}
+
+animateLight();
+
+/* =================================
+   MOUSE TRAIL
+================================= */
+
+let lastTrail = 0;
+
+document.addEventListener("mousemove", e => {
+
+    const now = Date.now();
+
+    if(now - lastTrail < 30)
+        return;
+
+    lastTrail = now;
+
+    const trail =
+        document.createElement("div");
+
+    trail.className = "trail";
+
+    trail.style.left =
+        e.clientX + "px";
+
+    trail.style.top =
+        e.clientY + "px";
+
+    document.body.appendChild(trail);
+
+    setTimeout(() => {
+        trail.remove();
+    }, 700);
+});
+
+/* =================================
+   TIKLAMA PARLAMASI
+================================= */
+
+document.addEventListener("click", () => {
+
+    logo.style.textShadow = `
+        0 0 10px #ffffff,
+        0 0 25px #ffffff,
+        0 0 50px #63d8ff,
+        0 0 100px #63d8ff,
+        0 0 180px rgba(70,200,255,.7)
+    `;
+
+    logo.style.transform =
+        "scale(1.04)";
+
+    setTimeout(() => {
+
+        logo.style.textShadow = "";
 
         logo.style.transform =
-            `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
-    });
+            "scale(1)";
 
-    /* Glow daha yavaş takip etsin */
-    function animateGlow() {
-        glowX += (mouseX - glowX) * 0.075;
-        glowY += (mouseY - glowY) * 0.075;
+    }, 450);
+});
 
-        cursorGlow.style.left = glowX + "px";
-        cursorGlow.style.top = glowY + "px";
-
-        requestAnimationFrame(animateGlow);
-    }
-
-    animateGlow();
-
-    /* -------------------------
-       MOUSE TRAIL
-    ------------------------- */
-    let lastTrail = 0;
-
-    document.addEventListener("mousemove", (e) => {
-        const now = Date.now();
-
-        if (now - lastTrail < 35) return;
-
-        lastTrail = now;
-
-        const trail = document.createElement("div");
-        trail.className = "trail";
-
-        trail.style.left = e.clientX + "px";
-        trail.style.top = e.clientY + "px";
-
-        document.body.appendChild(trail);
-
-        setTimeout(() => {
-            trail.remove();
-        }, 700);
-    });
-
-    /* -------------------------
-       NADİR GLITCH
-    ------------------------- */
-    setInterval(() => {
-        if (Math.random() > 0.55) {
-            logo.classList.add("glitch");
-
-            setTimeout(() => {
-                logo.classList.remove("glitch");
-            }, 200);
-        }
-    }, 4500);
-
-    /* -------------------------
-       TIKLAYINCA PARLAMA
-    ------------------------- */
-    document.addEventListener("click", () => {
-        logo.style.textShadow = `
-            0 0 10px white,
-            0 0 30px white,
-            0 0 70px #9d6cff,
-            0 0 140px #713cff,
-            0 0 220px rgba(100,50,255,0.8)
-        `;
-
-        setTimeout(() => {
-            logo.style.textShadow = "";
-        }, 450);
-    });
 </script>
 
 </body>
 </html>
-```
